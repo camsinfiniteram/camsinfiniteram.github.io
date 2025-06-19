@@ -52,7 +52,7 @@ async function startCapture() {
         analyser.fftSize = 2048;
         
         // Create a script processor node for custom processing
-        javascriptNode = audioContext.createScriptProcessor(1024, 1, 1);
+        javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
         javascriptNode.onaudioprocess = processAudio;
 
         // Connect the nodes: microphone -> analyser -> javascriptNode -> destination
@@ -237,7 +237,8 @@ function drawSpectralEnvelope(lpcCoefficients) {
         }
         
         // Magnitude of 1 / A(e^jw)
-        const val = 1.0 / Math.sqrt(re * re + im * im);
+        const tmpval = 1.0 / Math.sqrt(re * re + im * im);
+        const val = Math.log10(tmpval) * 20; // Convert to dB scale, makes it easier to visualize
 
         freqResponse[i] = val;
         if(isFinite(val) && val > maxVal) {
