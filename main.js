@@ -1,4 +1,3 @@
-// ...existing code moved from <script>...</script> in main.html...
 // DOM element references
 const startButton = document.getElementById('startButton');
 const canvas = document.getElementById('visualizerCanvas');
@@ -87,8 +86,6 @@ function stopCapture() {
     startButton.textContent = 'Start Audio Capture';
     startButton.classList.remove('bg-red-600', 'hover:bg-red-700');
     startButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
-    // Clear canvas
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // Main audio processing function
@@ -116,7 +113,7 @@ function applyWindow(buffer) {
     const N = buffer.length;
     const windowed = new Float32Array(N);
     for (let i = 0; i < N; i++) {
-        windowed[i] = buffer[i] * (0.54 - 0.46 * Math.cos(2 * Math.PI * i / (N - 1)));
+        windowed[i] = buffer[i] * (0.54 - 0.46 * Math.cos(2 * Math.PI * i / (N - 1))); //These are the coefficients for the Hamming window, which is commonly used in signal processing to reduce spectral leakage. (no idea what that means, but it sounds important)
     }
     return windowed;
 }
@@ -176,12 +173,49 @@ function lpc(signal, p) {
 
 
 /**
- * Draws the spectral envelope on the canvas.
+ * Draws the spectral envelope on the canvas, scaled to 0-5000Hz.
+ * Also adds frequency labels to the X-axis.
  * @param {Float32Array} lpcCoefficients The LPC coefficients.
  */
 function drawSpectralEnvelope(lpcCoefficients) {
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    canvasCtx.strokeStyle = '#4299e1'; // Blue color
+    // Ensure we have a valid audio context to get the sample rate
+    if (!audioContext) {
+        return;
+    }
+    const sampleRate = audioContext.sampleRate;
+
+    // Clear canvas with background color
+    canvasCtx.fillStyle = '#1a202c';
+    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+    canvasCtx.textAlign = 'left';
+
+    const maxFreq = 5000; // Max frequency to display (Hz)
+
+    // --- Draw Frequency Axis Labels and Grid ---
+    canvasCtx.lineWidth = 1;
+    canvasCtx.strokeStyle = '#374151'; // Grid line color
+    canvasCtx.fillStyle = '#9ca3af';   // Text color
+    canvasCtx.font = '12px Inter';
+    const numGridLines = 5;
+    for (let i = 0; i <= numGridLines; i++) {
+        const freq = (maxFreq / numGridLines) * i;
+        const x = (freq / maxFreq) * canvas.width;
+        
+        if (i > 0) {
+            // Draw vertical grid line
+            canvasCtx.beginPath();
+            canvasCtx.moveTo(x, 0);
+            canvasCtx.lineTo(x, canvas.height - 20); // Leave space for labels
+            canvasCtx.stroke();
+        }
+        
+        // Draw frequency label
+        const label = `${freq / 1000}k`;
+        canvasCtx.fillText(label, x - (i === 0 ? 0 : 10), canvas.height - 5);
+    }
+
+    // --- Calculate and Draw LPC Curve ---
+    canvasCtx.strokeStyle = '#4299e1'; // Blue color for the plot
     canvasCtx.lineWidth = 2;
     canvasCtx.beginPath();
     
@@ -190,21 +224,36 @@ function drawSpectralEnvelope(lpcCoefficients) {
     let maxVal = 0.0001; // To avoid division by zero and initialize max
 
     for (let i = 0; i < numPoints; i++) {
-        const w = (Math.PI * i) / numPoints;
+        // Map the canvas pixel 'i' to a frequency in Hz
+        const freq = (i / numPoints) * maxFreq;
+        // Convert frequency in Hz to angular frequency (radians/sample)
+        const w = 2 * Math.PI * freq / sampleRate;
+
+        // Calculate the denominator of the LPC transfer function, A(z)
         let re = 1.0, im = 0.0;
         for (let k = 1; k < lpcCoefficients.length; k++) {
             re += lpcCoefficients[k] * Math.cos(k * w);
-            im += lpcCoefficients[k] * Math.sin(k * w);
+            im += lpcCoefficients[k] * Math.sin(k * w); // sign doesn't matter for magnitude
         }
+        
+        // Magnitude of 1 / A(e^jw)
         const val = 1.0 / Math.sqrt(re * re + im * im);
+
         freqResponse[i] = val;
-        if(val > maxVal) maxVal = val;
+        if(isFinite(val) && val > maxVal) {
+            maxVal = val;
+        }
     }
 
     for (let i = 0; i < numPoints; i++) {
         const x = i;
+        
         // Normalize and scale to canvas height
-        const y = canvas.height - (freqResponse[i] / maxVal * canvas.height * 0.9) - (canvas.height * 0.05) ;
+        let normalizedY = freqResponse[i] / maxVal;
+        if (!isFinite(normalizedY)) {
+            normalizedY = 0; // Prevent drawing issues with Infinity/NaN
+        }
+        const y = canvas.height - (normalizedY * canvas.height * 0.9) - (canvas.height * 0.05) ;
 
         if (i === 0) {
             canvasCtx.moveTo(x, y);
@@ -213,34 +262,4 @@ function drawSpectralEnvelope(lpcCoefficients) {
         }
     }
     canvasCtx.stroke();
-
-    
-    // Draw x-axis with frequency labels
-    canvasCtx.strokeStyle = '#fff';
-    canvasCtx.lineWidth = 1;
-    canvasCtx.beginPath();
-    // Draw axis line
-    canvasCtx.moveTo(0, canvas.height - 1);
-    canvasCtx.lineTo(canvas.width, canvas.height - 1);
-    canvasCtx.stroke();
-
-    // Draw frequency ticks and labels
-    const sampleRate = audioContext ? audioContext.sampleRate : 44100;
-    const nyquist = sampleRate / 2;
-    const numTicks = 10;
-    canvasCtx.fillStyle = '#888';
-    canvasCtx.font = '12px sans-serif';
-    canvasCtx.textAlign = 'center';
-    for (let i = 0; i <= numTicks; i++) {
-        const x = (i / numTicks) * canvas.width;
-        const freq = Math.round((i / numTicks) * nyquist);
-        // Tick
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(x, canvas.height - 1);
-        canvasCtx.lineTo(x, canvas.height - 8);
-        canvasCtx.stroke();
-        // Label
-        canvasCtx.fillText(freq + ' Hz', x, canvas.height - 12);
-    }
-
 }
