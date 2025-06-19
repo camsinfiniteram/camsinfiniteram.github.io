@@ -212,6 +212,35 @@ function drawSpectralEnvelope(lpcCoefficients) {
             canvasCtx.lineTo(x, y);
         }
     }
-
     canvasCtx.stroke();
+
+    
+    // Draw x-axis with frequency labels
+    canvasCtx.strokeStyle = '#fff';
+    canvasCtx.lineWidth = 1;
+    canvasCtx.beginPath();
+    // Draw axis line
+    canvasCtx.moveTo(0, canvas.height - 1);
+    canvasCtx.lineTo(canvas.width, canvas.height - 1);
+    canvasCtx.stroke();
+
+    // Draw frequency ticks and labels
+    const sampleRate = audioContext ? audioContext.sampleRate : 44100;
+    const nyquist = sampleRate / 2;
+    const numTicks = 10;
+    canvasCtx.fillStyle = '#888';
+    canvasCtx.font = '12px sans-serif';
+    canvasCtx.textAlign = 'center';
+    for (let i = 0; i <= numTicks; i++) {
+        const x = (i / numTicks) * canvas.width;
+        const freq = Math.round((i / numTicks) * nyquist);
+        // Tick
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(x, canvas.height - 1);
+        canvasCtx.lineTo(x, canvas.height - 8);
+        canvasCtx.stroke();
+        // Label
+        canvasCtx.fillText(freq + ' Hz', x, canvas.height - 12);
+    }
+
 }
