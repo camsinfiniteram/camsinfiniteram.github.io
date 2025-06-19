@@ -178,84 +178,61 @@ function lpc(signal, p) {
  * @param {Float32Array} lpcCoefficients The LPC coefficients.
  */
 function drawSpectralEnvelope(lpcCoefficients) {
-    // Ensure we have a valid audio context to get the sample rate
-    if (!audioContext) {
-        return;
-    }
+    if (!audioContext) return;
     const sampleRate = audioContext.sampleRate;
-
-    // Clear canvas with background color
     canvasCtx.fillStyle = '#1a202c';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
     canvasCtx.textAlign = 'left';
 
-    const maxFreq = 5000; // Max frequency to display (Hz)
-
-    // --- Draw Frequency Axis Labels and Grid ---
+    const maxFreq = 5000;
     canvasCtx.lineWidth = 1;
-    canvasCtx.strokeStyle = '#374151'; // Grid line color
-    canvasCtx.fillStyle = '#9ca3af';   // Text color
+    canvasCtx.strokeStyle = '#374151';
+    canvasCtx.fillStyle = '#9ca3af';
     canvasCtx.font = '12px Inter';
     const numGridLines = 5;
     for (let i = 0; i <= numGridLines; i++) {
         const freq = (maxFreq / numGridLines) * i;
         const x = (freq / maxFreq) * canvas.width;
-        
         if (i > 0) {
-            // Draw vertical grid line
             canvasCtx.beginPath();
             canvasCtx.moveTo(x, 0);
-            canvasCtx.lineTo(x, canvas.height - 20); // Leave space for labels
+            canvasCtx.lineTo(x, canvas.height - 20);
             canvasCtx.stroke();
         }
-        
-        // Draw frequency label
         const label = `${freq / 1000}k`;
         canvasCtx.fillText(label, x - (i === 0 ? 0 : 10), canvas.height - 5);
     }
 
-    // --- Calculate and Draw LPC Curve ---
-    canvasCtx.strokeStyle = '#4299e1'; // Blue color for the plot
+    // --- Calculate and Draw LPC Curve in dB ---
+    canvasCtx.strokeStyle = '#4299e1';
     canvasCtx.lineWidth = 2;
     canvasCtx.beginPath();
-    
+
     const numPoints = canvas.width;
     const freqResponse = new Float32Array(numPoints);
-    let maxVal = 0.0001; // To avoid division by zero and initialize max
+    let maxDb = -Infinity, minDb = Infinity;
 
     for (let i = 0; i < numPoints; i++) {
-        // Map the canvas pixel 'i' to a frequency in Hz
         const freq = (i / numPoints) * maxFreq;
-        // Convert frequency in Hz to angular frequency (radians/sample)
         const w = 2 * Math.PI * freq / sampleRate;
-
-        // Calculate the denominator of the LPC transfer function, A(z)
         let re = 1.0, im = 0.0;
         for (let k = 1; k < lpcCoefficients.length; k++) {
             re += lpcCoefficients[k] * Math.cos(k * w);
-            im += lpcCoefficients[k] * Math.sin(k * w); // sign doesn't matter for magnitude
+            im += lpcCoefficients[k] * Math.sin(k * w);
         }
-        
-        // Magnitude of 1 / A(e^jw)
-        const tmpval = 1.0 / Math.sqrt(re * re + im * im);
-        const val = Math.log10(tmpval) * 20; // Convert to dB scale, makes it easier to visualize
-
-        freqResponse[i] = val;
-        if(isFinite(val) && val > maxVal) {
-            maxVal = val;
-        }
+        const mag = 1.0 / Math.sqrt(re * re + im * im);
+        // Convert to dB, add small value to avoid log(0)
+        const db = 20 * Math.log10(mag + 1e-12);
+        freqResponse[i] = db;
+        if (db > maxDb) maxDb = db;
+        if (db < minDb) minDb = db;
     }
 
+    // Draw the curve, scaling dB to canvas height
     for (let i = 0; i < numPoints; i++) {
         const x = i;
-        
-        // Normalize and scale to canvas height
-        let normalizedY = freqResponse[i] / maxVal;
-        if (!isFinite(normalizedY)) {
-            normalizedY = 0; // Prevent drawing issues with Infinity/NaN
-        }
-        const y = canvas.height - (normalizedY * canvas.height * 0.9) - (canvas.height * 0.05) ;
-
+        // Map dB to y (top = maxDb, bottom = minDb)
+        const y = ((maxDb - freqResponse[i]) / (maxDb - minDb)) * (canvas.height - 25) + 5;
         if (i === 0) {
             canvasCtx.moveTo(x, y);
         } else {
