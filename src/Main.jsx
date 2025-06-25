@@ -3,8 +3,9 @@ import { Container, Button, Dropdown } from 'react-bootstrap';
 
 export default function Main() {
     
-    const [lpcOrder, setLpc] = useState(11)
-    // NOTE: average female LPC is 9-11, average male LPC is 11-13. Notify users of this
+    const [lpcOrder, setLpc] = useState(20)
+    // NOTE: average female LPC is 9-11, average male LPC is 11-13. Notify users of this.
+    // For this use case, 20 looks better, don't know why
     const [rec, setRec] = useState(false)
     const audioCtx = useRef(null)
     const analyzer = useRef(null)
@@ -240,18 +241,19 @@ const stopCapture = () => {
         // draw the vertical bounds for F1/F2 formants
         const a_f1_range = [638, 657];
         const a_f2_range = [1215, 1353];
-        const f1 = (a_f1_range[0] / maxFreq) * canvas.width;
-        const f2 = (a_f2_range[0] / maxFreq) * canvas.width;
+        const f1_start = (a_f1_range[0] / maxFreq) * canvas.width;
+        const f1_end = (a_f1_range[1] / maxFreq) * canvas.width;
+        const f2_start = (a_f2_range[0] / maxFreq) * canvas.width;
+        const f2_end = (a_f2_range[1] / maxFreq) * canvas.width;
         ctx.strokeStyle = '#f56565';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(f1, 0);
-        ctx.lineTo(f1, canvas.height - 20);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(f2, 0);
-        ctx.lineTo(f2, canvas.height - 20);
-        ctx.stroke();
+        //draw a transparent rectangle for F1
+        ctx.fillStyle = 'rgba(245, 101, 101, 0.2)';
+        ctx.fillRect(f1_start, 0, f1_end - f1_start, canvas.height - 20);
+        ctx.strokeRect(f1_start, 0, f1_end - f1_start, canvas.height - 20);
+        //draw a transparent rectangle for F2
+        ctx.fillStyle = 'rgba(245, 101, 101, 0.2)';
+        ctx.fillRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
+        ctx.strokeRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
     }
 
     return (
@@ -273,7 +275,7 @@ const stopCapture = () => {
                     value={lpcOrder}
                     onChange={(e) => setLpc(e.target.value)}
                     min="1"
-                    max="20"
+                    max="30"
                 />                
             </div>
 
