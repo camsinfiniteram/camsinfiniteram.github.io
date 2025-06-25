@@ -33,7 +33,7 @@ export default function Main() {
         window.addEventListener('resize', resizeCanvas);
         return () =>
             window.removeEventListener('resize', resizeCanvas); // cleanup on unmoun
-    }, [])
+    }, []);
 
     // event listener for the start button
     const startButton = () => {
@@ -184,12 +184,12 @@ const stopCapture = () => {
         const canvas = ctx.canvas;
         const sr = audioCtx.current.sampleRate;
 
-        ctx.fillStyle = '#1a202c';
+        ctx.fillStyle = '#1a202c'; //TODO: make the background color match the theme
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         const maxFreq = 5000;
         ctx.lineWidth = 1;
-        ctx.strokeStyle = '#374151';
-        ctx.fillStyle = '#9ca3af';
+        ctx.strokeStyle = '#374151'; //TODO: make the grid color match the theme
+        ctx.fillStyle = '#9ca3af'; //TODO: make the text color match the theme
         ctx.font = '12px Inter';
 
         // Draw X-axis labels and grid lines
