@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="home" style={styles.home}>
       <Text style={styles.txt}>VOCAL-ize</Text>
-      <Button variant="success" style={styles.button} onClick={() => navigate('/main')}>
+      <Button variant="success" style={styles.button} onClick={() => navigate('/Modules')}>
         Start
       </Button>
     </div>
@@ -21,22 +21,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         height: '100vh',
-        backgroundColor: '#374151',
+        backgroundColor: '#080133',
     },
     txt: {
         fontSize: '3rem',
         marginBottom: '20px',
-        color: '#9ca3af',  
+        color: '#FFFFFF',  
         fontWeight: 'bold',
       
     },
     button: {
-        fontSize: '1.5rem',
-        padding: '10px 20px',
-        backgroundColor: '#F5EE9E',
+        fontSize: '2rem',
+        padding: '20px 40px',
+        backgroundColor: '#FFFFFF',
         border: 'none',
         borderRadius: '5px',
-        color: '#9ca3af',
+        color: '#080133',
         cursor: 'pointer',
         fontWeight: 'bold',
     },
