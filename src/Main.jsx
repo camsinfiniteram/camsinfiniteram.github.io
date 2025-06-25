@@ -236,6 +236,22 @@ const stopCapture = () => {
             }
         }
         ctx.stroke();
+
+        // draw the vertical bounds for F1/F2 formants
+        const a_f1_range = [638, 657];
+        const a_f2_range = [1215, 1353];
+        const f1 = (a_f1_range[0] / maxFreq) * canvas.width;
+        const f2 = (a_f2_range[0] / maxFreq) * canvas.width;
+        ctx.strokeStyle = '#f56565';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(f1, 0);
+        ctx.lineTo(f1, canvas.height - 20);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(f2, 0);
+        ctx.lineTo(f2, canvas.height - 20);
+        ctx.stroke();
     }
 
     return (
