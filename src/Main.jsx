@@ -20,9 +20,14 @@ export default function Main() {
        const canvas = canvasRef.current;
         const ctx    = canvas.getContext('2d');
         ctxRef.current = ctx;
-        const resizeCanvas = () => {
+        const resizeCanvas = () => { //this a decent starting point for responsive canvas
             canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
+            canvas.height = 384;
+            canvas.style.width = '100%';
+            canvas.style.height = '384px';
+            canvas.style.borderRadius = '0.5rem'; // rounded-lg
+            canvas.style.overflow = 'hidden';
+            canvas.style.marginBottom = '1.5rem'; // mb-6
         }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
@@ -186,6 +191,8 @@ const stopCapture = () => {
         ctx.strokeStyle = '#374151';
         ctx.fillStyle = '#9ca3af';
         ctx.font = '12px Inter';
+
+        // Draw X-axis labels and grid lines
         const numGridLines = 5;
         for (let i = 0; i <= numGridLines; i++) {
             const freq = (maxFreq / numGridLines) * i;
@@ -199,6 +206,11 @@ const stopCapture = () => {
             const label = `${freq / 1000}k`;
             ctx.fillText(label, x - (i === 0 ? 0 : 10), canvas.height - 5);
         }
+        // Draw horizontal line at the bottom
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height - 20);
+        ctx.lineTo(canvas.width, canvas.height - 20);
+        ctx.stroke();
 
         // --- Calculate and Draw LPC Curve in dB ---
         ctx.strokeStyle = '#4299e1';
