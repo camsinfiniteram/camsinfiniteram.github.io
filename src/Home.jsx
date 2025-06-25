@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="home" style={styles.home}>
       <Text style={styles.txt}>VOCAL-ize</Text>
-      <Button variant="success" style={styles.button} onClick={() => navigate('/main')}>
+      <Button variant="success" style={styles.button} onClick={() => navigate('/Modules')}>
         Start
       </Button>
     </div>
