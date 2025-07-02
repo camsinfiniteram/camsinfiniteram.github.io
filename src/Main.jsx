@@ -1,5 +1,5 @@
 import React, {  useEffect, useState, useRef } from 'react';
-import { Container, Button, Dropdown } from 'react-bootstrap';
+import { Container, Button, Nav } from 'react-bootstrap';
 
 export default function Main() {
     
@@ -98,7 +98,6 @@ const stopCapture = () => {
         const { a, err } = lpc(windowedBuffer, lpcOrder);
         if (a) {
             drawSpectralEnvelope(a);
-            console.log('LPC analysis successful. Coefficients:', a);
         } else {
             console.log('No!!!! LPC failed: ', err);
         }
@@ -250,7 +249,7 @@ const stopCapture = () => {
         }
         ctx.stroke();
 
-        // draw the vertical bounds for F1/F2 formants
+        // draw the vertical boxes for F1/F2 formants
         const a_f1_range = [638, 657];
         const a_f2_range = [1215, 1353];
         const f1_start = (a_f1_range[0] / maxFreq) * canvas.width;
@@ -268,8 +267,16 @@ const stopCapture = () => {
         ctx.strokeRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
     }
 
+    // TODO: create hamburger menu for navigation s.t. when the user clicks on it, it opens a side menu with the different vowels
+    // and when they press a specific vowel, it changes the canvas to show the spectral envelope for that vowel
+    // how to do this? 
+    // first, i need to create a state var for the current vowel
+    // then, function that updates canvas based on the current vowel
     return (
         <Container className="main">
+            <Nav className="navbar">
+                
+            </Nav>
             <h1 className="header">LPC Analysis</h1>
             <div className="canvas-container">
                 <canvas ref={canvasRef} className="canvas" />
@@ -289,6 +296,11 @@ const stopCapture = () => {
                     min="1"
                     max="30"
                 />                
+            </div>
+            <div classname="foot">
+                <Button variant="success" onClick = {() => window.location.href = '/Modules'}>
+                    Back
+                </Button>
             </div>
 
         </Container>

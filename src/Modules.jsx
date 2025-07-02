@@ -11,14 +11,14 @@ export default function Modules() {
             <Button
                 variant="success"
                 style={styles.button}
-                onClick={() => navigate('/Main')}
+                onClick={() => navigate('/VowelSubmodules')}
             >
                 Vowel
             </Button>
             <Button
                 variant="success"
                 style={styles.button}
-                onClick={() => navigate('/Main')}
+                onClick={() => navigate('/StressSubmodules')}
             >
                 Stress
             </Button>
