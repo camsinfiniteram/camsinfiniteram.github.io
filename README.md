@@ -1,1 +1,1 @@
-# camsinfiniteram.github.io
+# VOCAL-ize temporary domain
