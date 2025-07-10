@@ -1,8 +1,8 @@
-import React, {  useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Container, Button, Nav } from 'react-bootstrap';
 
 export default function Main() {
-    
+
     const [lpcOrder, setLpc] = useState(20)
     // NOTE: average female LPC is 9-11, average male LPC is 11-13. Notify users of this.
     // For this use case, 20 looks better, don't know why
@@ -17,8 +17,8 @@ export default function Main() {
 
     // set canvas dimensions
     useEffect(() => {
-       const canvas = canvasRef.current;
-        const ctx    = canvas.getContext('2d');
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
         ctxRef.current = ctx;
         const resizeCanvas = () => { //this a decent starting point for responsive canvas
             canvas.width = canvas.parentElement.clientWidth;
@@ -37,7 +37,18 @@ export default function Main() {
 
     // event listener for the start button
     const startButton = () => {
-        rec ? stopCapture() : startCapture();
+        if (rec) {
+            stopCapture();
+        } else if (!rec) {
+            startCapture();
+            setTimeLeft(duration)
+            setProg(5);
+            setMess("")
+            
+        }
+        setRec(r => !r);
+        setIsActive(is => !is);
+        //rec ? stopCapture() : startCapture();
     };
 
     // start audio capture 
@@ -70,21 +81,27 @@ export default function Main() {
         }
     };
 
-// stop audio capture
-const stopCapture = () => {
-    if (mic.current) {
-        mic.current.disconnect();
-        analyzer.current.disconnect();
-        node.current.disconnect();
-        audioCtx.current.close();
-        if (streamRef.current) {
-            streamRef.current.getTracks().forEach(t => t.stop());
+    // stop audio capture
+    const stopCapture = async () => {
+        if (mic.current) {
+            mic.current.disconnect();
+            analyzer.current.disconnect();
+            node.current.disconnect();
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(t => t.stop());
+            }
+            // close the audio context so we can restart it
+            await audioCtx.current.close();
+            audioCtx.current = null;
+            analyzer.current = null;
+            mic.current = null;
+            node.current = null;
+            streamRef.current = null;
+            setRec(false);
+            console.log('Audio capture stopped.');
         }
-        setRec(false);
-        console.log('Audio capture stopped.');
+
     }
-    
-}
 
     // main audio processing function
     const processAudio = (e) => {
@@ -267,15 +284,42 @@ const stopCapture = () => {
         ctx.strokeRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
     }
 
+    const duration = 5;
+    const [timeLeft, setTimeLeft] = useState(duration);
+    const [prog, setProg] = useState(5);
+    const [isActive, setIsActive] = useState(false);
+    const [mess, setMess] = useState("");
+
+    useEffect(() => {
+        if (!isActive) return;
+        if (timeLeft <= 0) {
+            setIsActive(false);
+            setMess("Time's up!");
+            stopCapture();
+            return;
+        }
+        const tim = setInterval(() => {
+            if (isActive && timeLeft > 0) {
+                setTimeLeft(timeLeft - 1);
+                setProg(prog - 1);
+            }
+        }, 1000);
+        return () => clearInterval(tim)
+    }, [isActive, timeLeft, prog])
+
+    const timeFormatter = (sec) => {
+        const remainingTime = sec % 60;
+        return `${Math.floor(sec / 60)}:${remainingTime < 10 ? '0' : ''}${remainingTime}`;
+    };
+
+
+
     // TODO: create hamburger menu for navigation s.t. when the user clicks on it, it opens a side menu with the different vowels
     // and when they press a specific vowel, it changes the canvas to show the spectral envelope for that vowel
-    // how to do this? 
-    // first, i need to create a state var for the current vowel
-    // then, function that updates canvas based on the current vowel
     return (
         <Container className="main">
             <Nav className="navbar">
-                
+
             </Nav>
             <h1 className="header">LPC Analysis</h1>
             <div className="canvas-container">
@@ -295,10 +339,31 @@ const stopCapture = () => {
                     onChange={(e) => setLpc(e.target.value)}
                     min="1"
                     max="30"
-                />                
+                />
+            </div>
+            <div className="timer-container">
+                <div id="timer"
+                style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold',
+                    marginBottom: '10px'}}>
+                    {timeFormatter(timeLeft)}
+                </div>
+                <div className="progress-label">
+                    <span>Keep your (mountain) peaks inside the bars!</span>
+                </div>
+                <div className="progress"
+                    style={{
+                        width: `${prog}%`,
+                        height: '20px',
+                        backgroundColor: '#080133',
+                        margin: '10px'
+                    }}>
+                    {mess && <div className="message">{mess}</div>}
+                </div>
             </div>
             <div classname="foot">
-                <Button variant="success" onClick = {() => window.location.href = '/Modules'}>
+                <Button variant="success" onClick={() => window.location.href = '/Modules'}>
                     Back
                 </Button>
             </div>
@@ -306,3 +371,5 @@ const stopCapture = () => {
         </Container>
     )
 }
+
+

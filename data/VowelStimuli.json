@@ -1,0 +1,296 @@
+{
+    "Vowel": {
+        "i": {
+            "ipa": "i",
+            "description": "/i/: Close front unrounded vowel",
+            "Segment": [
+                "i",
+                "i",
+                "i",
+                "i",
+                "i"
+            ],
+            "Syllable": [
+                "bi",
+                "di",
+                "gui",
+                "pi",
+                "ti",
+                "qui",
+                "ni",
+                "mi",
+                "li",
+                "ri"
+            ],
+            "Word": [
+                "cine",
+                "vino",
+                "liso",
+                "piso",
+                "rico",
+                "risa",
+                "niño",
+                "libro",
+                "fino",
+                "nido"
+            ],
+            "Phrase": [
+                "cine grande",
+                "vino frío",
+                "muy liso",
+                "piso limpio",
+                "rico postre",
+                "risa contagiosa",
+                "niño listo",
+                "libro viejo",
+                "fino detalle",
+                "nido vacío"
+            ],
+            "Sentence": [
+                "Hay un cine grande",
+                "El vino es muy frío",
+                "El cabello es muy liso",
+                "Camina por el piso limpio",
+                "Gracias por el rico postre",
+                "Tiene una risa contagiosa",
+                "El niño es listo",
+                "Mi libro está en la mesa",
+                "Cuento el detalle fino",
+                "El nido es vacío"
+            ]
+        },
+        "e": {
+            "ipa": "e",
+            "description": "/e/: Close-mid front unrounded vowel",
+            "Segment": [
+                "e",
+                "e",
+                "e",
+                "e",
+                "e"
+            ],
+            "Syllable": [
+                "be",
+                "de",
+                "gue",
+                "pe",
+                "te",
+                "que",
+                "ne",
+                "me",
+                "le",
+                "re"
+            ],
+            "Word": [
+                "bello",
+                "mesa",
+                "peso",
+                "leche",
+                "leña",
+                "techo",
+                "tema",
+                "pelo",
+                "letra",
+                "tela"
+            ],
+            "Phrase": [
+                "bella cosa",
+                "mesa grande",
+                "peso justo",
+                "leche fría",
+                "leña negra",
+                "techo blanco",
+                "tema bueno",
+                "pelo rubio",
+                "letra clara",
+                "tela cara"
+            ],
+            "Sentence": [
+                "Muestra la bella cosa.",
+                "Compramos la mesa grande.",
+                "Miden el peso justo.",
+                "La leche está en la nevera.",
+                "El poema de leña negra.",
+                "Ese techo blanco necesita pintura.",
+                "Aprenden el tema bueno.",
+                "Tengo pelo rubio.",
+                "Escribe una letra clara.",
+                "Quieres tela cara."
+            ]
+        },
+        "a": {
+            "ipa": "a",
+            "description": "/a/: Open front unrounded vowel",
+            "Segment": [
+                "a",
+                "a",
+                "a",
+                "a",
+                "a"
+            ],
+            "Syllable": [
+                "ba",
+                "da",
+                "ga",
+                "pa",
+                "ta",
+                "ca",
+                "na",
+                "ma",
+                "la",
+                "ra"
+            ],
+            "Word": [
+                "pata",
+                "lana",
+                "bajo",
+                "taza",
+                "sala",
+                "mano",
+                "papa",
+                "mapa"
+            ],
+            "Phrase": [
+                "dama linda",
+                "casa blanca",
+                "pata rota",
+                "lana suave",
+                "bajo sol",
+                "taza llena",
+                "sala vacía",
+                "mano firme",
+                "papa frita",
+                "mapa mundial"
+            ],
+            "Sentence": [
+                "Mira la dama linda.",
+                "Cenan en la casa blanca.",
+                "La silla tiene una pata rota.",
+                "La oveja regala lana suave.",
+                "Leo bajo sol.",
+                "Toma la taza llena.",
+                "Nadie está en la sala vacía.",
+                "Tiene la mano firme.",
+                "Comemos papas fritas.",
+                "Veo el mapa mundial."
+            ]
+        },
+        "o": {
+            "ipa": "o",
+            "description": "/o/: Close-mid back rounded vowel",
+            "Segment": [
+                "o",
+                "o",
+                "o",
+                "o",
+                "o"
+            ],
+            "Syllable": [
+                "bo",
+                "do",
+                "go",
+                "po",
+                "to",
+                "co",
+                "no",
+                "mo",
+                "lo",
+                "ro"
+            ],
+            "Word": [
+                "solo",
+                "loca",
+                "rojo",
+                "poco",
+                "todo",
+                "bote",
+                "moto",
+                "polo",
+                "gota",
+                "tomo"
+            ],
+            "Phrase": [
+                "solo brillante",
+                "cosa loca",
+                "rojo claro",
+                "poco tiempo",
+                "todo listo",
+                "bote gris",
+                "moto rápida",
+                "polo frío",
+                "gota grande",
+                "tomo zumo"
+            ],
+            "Sentence": [
+                "Es solo brillante el diamante.",
+                "Escuchan una cosa loca.",
+                "Pinto con rojo claro.",
+                "Hay poco tiempo.",
+                "Está todo listo.",
+                "Van en bote gris.",
+                "Montan en moto rápida.",
+                "Ese polo es frío.",
+                "La gota grande cae al suelo.",
+                "Siempre tomo zumo por la mañana."
+            ]
+        },
+        "u": {
+            "ipa": "u",
+            "description": "/u/: Close back rounded vowel",
+            "Segment": [
+                "u",
+                "u",
+                "u",
+                "u",
+                "u"
+            ],
+            "Syllable": [
+                "bu",
+                "du",
+                "gu",
+                "pu",
+                "tu",
+                "cu",
+                "nu",
+                "mu",
+                "lu",
+                "ru"
+            ],
+            "Word": [
+                "pura",
+                "luna",
+                "jugo",
+                "mudo",
+                "crudo",
+                "nube",
+                "rulo",
+                "duda",
+                "puño",
+                "chulo"
+            ],
+            "Phrase": [
+                "pura victoria",
+                "luna llena",
+                "jugo dulce",
+                "mudo total",
+                "muy crudo",
+                "nube gris",
+                "rulo moreno",
+                "mucha duda",
+                "puño cerrado",
+                "¡qué chulo!"
+            ],
+            "Sentence": [
+                "La luna es llena",
+                "El jugo está dulce",
+                "Queda mudo del choque",
+                "El pescado está muy crudo",
+                "La nube gris cubre el cielo",
+                "El rulo moreno está en su lugar",
+                "Voy con mucha duda",
+                "Mueve el puño cerrado",
+                "Te dicen ¡qué chulo!"
+            ]
+        }
+    }
+}
