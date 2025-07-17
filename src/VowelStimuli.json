@@ -3,6 +3,14 @@
         "i": {
             "ipa": "i",
             "description": "/i/: Close front unrounded vowel",
+            "formant": {
+                "f1": [265, 286],
+                "f2": [2147, 2318],
+                "f1_low": 265,
+                "f1_high": 286,
+                "f2_low": 2147,
+                "f2_high": 2318
+            },
             "Segment": [
                 "i",
                 "i",
@@ -62,6 +70,14 @@
         "e": {
             "ipa": "e",
             "description": "/e/: Close-mid front unrounded vowel",
+            "formant": {
+                "f1": [436, 458],
+                "f2": [1814, 1995],
+                "f1_low": 436,
+                "f1_high": 458,
+                "f2_low": 1814,
+                "f2_high": 1995
+            },
             "Segment": [
                 "e",
                 "e",
@@ -121,6 +137,14 @@
         "a": {
             "ipa": "a",
             "description": "/a/: Open front unrounded vowel",
+            "formant": {
+                "f1": [638, 657],
+                "f2": [1215, 1353],
+                "f1_low": 638,
+                "f1_high": 657,
+                "f2_low": 1215,
+                "f2_high": 1353
+            },
             "Segment": [
                 "a",
                 "a",
@@ -178,6 +202,14 @@
         "o": {
             "ipa": "o",
             "description": "/o/: Close-mid back rounded vowel",
+            "formant": {
+                "f1": [460, 475],
+                "f2": [888, 1019],
+                "f1_low": 460,
+                "f1_high": 475,
+                "f2_low": 888,
+                "f2_high": 1019
+            },
             "Segment": [
                 "o",
                 "o",
@@ -237,6 +269,14 @@
         "u": {
             "ipa": "u",
             "description": "/u/: Close back rounded vowel",
+            "formant": {
+                "f1": [394, 322],
+                "f2": [669, 992],
+                "f1_low": 394,
+                "f1_high": 322,
+                "f2_low": 669,
+                "f2_high": 992
+            },
             "Segment": [
                 "u",
                 "u",

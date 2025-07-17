@@ -15,6 +15,8 @@ export default function Main() {
     const ctxRef = useRef(null)
     const streamRef = useRef(null)
 
+    const vowelstimuli = require('./VowelStimuli.json');
+
     // set canvas dimensions
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -267,12 +269,17 @@ export default function Main() {
         ctx.stroke();
 
         // draw the vertical boxes for F1/F2 formants
-        const a_f1_range = [638, 657];
-        const a_f2_range = [1215, 1353];
-        const f1_start = (a_f1_range[0] / maxFreq) * canvas.width;
-        const f1_end = (a_f1_range[1] / maxFreq) * canvas.width;
-        const f2_start = (a_f2_range[0] / maxFreq) * canvas.width;
-        const f2_end = (a_f2_range[1] / maxFreq) * canvas.width;
+        // Import formant data for vowels
+        if (!vowelstimuli || !vowelstimuli["Vowel"][selectedVowel]) {
+            console.error('Selected vowel data not found:', selectedVowel);
+            return;
+        }
+        const f1_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f1"]; // || [638, 657];
+        const f2_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f2"]; //[1215, 1353];
+        const f1_start = (f1_range[0] / maxFreq) * canvas.width;
+        const f1_end = (f1_range[1] / maxFreq) * canvas.width;
+        const f2_start = (f2_range[0] / maxFreq) * canvas.width;
+        const f2_end = (f2_range[1] / maxFreq) * canvas.width;
         ctx.strokeStyle = '#f56565';
         //draw a transparent rectangle for F1
         ctx.fillStyle = 'rgba(245, 101, 101, 0.2)';
@@ -316,12 +323,34 @@ export default function Main() {
 
     // TODO: create hamburger menu for navigation s.t. when the user clicks on it, it opens a side menu with the different vowels
     // and when they press a specific vowel, it changes the canvas to show the spectral envelope for that vowel
+    // Vowel selector state
+    const [selectedVowel, setSelectedVowel] = useState('a');
+    const vowels = [
+        { label: 'A', value: 'a' },
+        { label: 'E', value: 'e' },
+        { label: 'I', value: 'i' },
+        { label: 'O', value: 'o' },
+        { label: 'U', value: 'u' },
+    ];
+
     return (
         <Container className="main">
             <Nav className="navbar">
 
             </Nav>
             <h1 className="header">LPC Analysis</h1>
+            <div className="vowel-selector" style={{ marginBottom: '1rem' }}>
+                <label htmlFor="vowelSelect" style={{ marginRight: '0.5rem' }}>Vowel:</label>
+                <select
+                    id="vowelSelect"
+                    value={selectedVowel}
+                    onChange={e => setSelectedVowel(e.target.value)}
+                >
+                    {vowels.map(v => (
+                        <option key={v.value} value={v.value}>{v.label}</option>
+                    ))}
+                </select>
+            </div>
             <div className="canvas-container">
                 <canvas ref={canvasRef} className="canvas" />
             </div>
