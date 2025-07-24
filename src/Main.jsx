@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Button, Nav } from 'react-bootstrap';
 
+// Add this helper to parse query params
+function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+}
+
 export default function Main() {
 
     const [lpcOrder, setLpc] = useState(20)
@@ -274,8 +280,8 @@ export default function Main() {
             console.error('Selected vowel data not found:', selectedVowel);
             return;
         }
-        const f1_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f1"]; // || [638, 657];
-        const f2_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f2"]; //[1215, 1353];
+        const f1_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f1"];
+        const f2_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f2"];
         const f1_start = (f1_range[0] / maxFreq) * canvas.width;
         const f1_end = (f1_range[1] / maxFreq) * canvas.width;
         const f2_start = (f2_range[0] / maxFreq) * canvas.width;
@@ -333,12 +339,28 @@ export default function Main() {
         { label: 'U', value: 'u' },
     ];
 
+    // Add state for submodule
+    const [selectedSubmodule, setSelectedSubmodule] = useState(getQueryParam('submodule') || 'Segment');
+
+    // Update submodule if URL changes
+    useEffect(() => {
+        const handlePopState = () => {
+            setSelectedSubmodule(getQueryParam('submodule') || 'Segment');
+        };
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
+
     return (
         <Container className="main">
             <Nav className="navbar">
 
             </Nav>
             <h1 className="header">LPC Analysis</h1>
+            {/* Show selected submodule */}
+            <div style={{ marginBottom: '1rem', fontWeight: 'bold', color: '#4299e1' }}>
+                Submodule: {selectedSubmodule}
+            </div>
             <div className="vowel-selector" style={{ marginBottom: '1rem' }}>
                 <label htmlFor="vowelSelect" style={{ marginRight: '0.5rem' }}>Vowel:</label>
                 <select
