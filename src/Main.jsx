@@ -25,6 +25,11 @@ export default function Main() {
     const canvasRef = useRef(null)
     const ctxRef = useRef(null)
     const streamRef = useRef(null)
+    const chunksRef = useRef([]);
+
+    // state variables for recording and playback
+    const [mediaRecorder, setMediaRecorder] = useState(null);
+    const [audioURL, setAudioURL] = useState(null);
 
     const vowelstimuli = require('./VowelStimuli.json');
 
@@ -64,7 +69,7 @@ export default function Main() {
         //rec ? stopCapture() : startCapture();
     };
 
-    // start audio capture 
+    // start audio capture and recording
     const startCapture = async () => {
         try {
             // Initialize AudioContext
@@ -88,13 +93,28 @@ export default function Main() {
             analyzer.current.connect(node.current);
             node.current.connect(audioCtx.current.destination);
 
+            // --- MediaRecorder for playback ---
+            const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+            chunksRef.current = []; // reset local chunks array
+            setMediaRecorder(recorder);
+            recorder.ondataavailable = e => {
+                if (e.data.size > 0) {
+                    chunksRef.current.push(e.data);
+                }
+            };
+            recorder.onstop = () => {
+                const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+                setAudioURL(URL.createObjectURL(blob));
+            };
+            recorder.start();
+
             setRec(true);
         } catch (err) {
             console.log('Error accessing microphone: ' + err.message);
         }
     };
 
-    // stop audio capture
+    // stop audio capture and recording
     const stopCapture = async () => {
         if (mic.current) {
             mic.current.disconnect();
@@ -111,6 +131,12 @@ export default function Main() {
             node.current = null;
             streamRef.current = null;
             setRec(false);
+            // --- Stop MediaRecorder ---
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                console.log("MediaRecorder state:", mediaRecorder.state);
+                mediaRecorder.stop();
+            }
+            setMediaRecorder(null);
             console.log('Audio capture stopped.');
         }
 
@@ -349,9 +375,9 @@ export default function Main() {
 
     //update stimulus when vowel changes
     useEffect(() => {
-        console.log("Submodule changed to:", selectedSubmodule);
+        //console.log("Submodule changed to:", selectedSubmodule);
         setSelectedStimulusIndex(randint(vowelstimuli["Vowel"][selectedVowel][selectedSubmodule].length));
-        console.log(`Selected stimulus for ${selectedVowel} ${selectedSubmodule}:`, vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex]);
+        //console.log(`Selected stimulus for ${selectedVowel} ${selectedSubmodule}:`, vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex]);
     }, [selectedVowel]);
 
     // Update submodule if URL changes
@@ -365,9 +391,7 @@ export default function Main() {
 
     return (
         <Container className="main">
-            <Nav className="navbar">
-
-            </Nav>
+            <Nav className="navbar"></Nav>
             <h1 className="header">LPC Analysis</h1>
             {/* Show selected submodule */}
             <div style={{ marginBottom: '1rem', fontWeight: 'bold', color: '#4299e1' }}>
@@ -395,6 +419,15 @@ export default function Main() {
                     : <span style={{ color: '#9ca3af' }}>No stimulus available</span>
                 }
             </div>
+            {/* --- Playback UI --- */}
+            {audioURL && (
+                <div style={{ marginBottom: '1rem' }}>
+                    <audio controls src={audioURL} />
+                    <div style={{ fontSize: '0.9rem', color: '#4299e1', marginTop: '0.5rem' }}>
+                        Playback your recording above.
+                    </div>
+                </div>
+            )}
             <div className="canvas-container">
                 <canvas ref={canvasRef} className="canvas" />
             </div>
