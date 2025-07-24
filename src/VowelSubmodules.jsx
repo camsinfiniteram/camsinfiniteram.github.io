@@ -2,15 +2,12 @@ import SubmoduleDropdown from './SubmoduleDropdown'
 
 export default function VowelSubmodules() {
   const vowelItems = [
-    { label: 'Segment',  path: '../Main' },
-    { label: 'Word',     path: '../Main' },
-    { label: 'Phrase',   path: '../Main' },
-    { label: 'Sentence', path: '../Main' }
+    { label: 'Segment',  path: '../Main?submodule=Segment' },
+    { label: 'Word',     path: '../Main?submodule=Word' },
+    { label: 'Phrase',   path: '../Main?submodule=Phrase' },
+    { label: 'Sentence', path: '../Main?submodule=Sentence' }
   ];
 
-  const handleSelect = (selectedLabel) => {
-    window.location.href = `../Main?submodule=${encodeURIComponent(selectedLabel)}`;
-  };
 
   return (
     <div
@@ -50,7 +47,6 @@ export default function VowelSubmodules() {
         <div style={{ width: '100%', marginBottom: 16 }}>
           <SubmoduleDropdown
             items={vowelItems}
-            onSelect={handleSelect}
           />
         </div>
       </div>

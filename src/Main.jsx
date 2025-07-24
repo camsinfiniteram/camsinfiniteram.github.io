@@ -7,6 +7,11 @@ function getQueryParam(name) {
     return params.get(name);
 }
 
+// Returns a random integer between 0 and n-1
+function randint(n) {
+    return Math.floor(Math.random() * n);
+}
+
 export default function Main() {
 
     const [lpcOrder, setLpc] = useState(20)
@@ -330,7 +335,7 @@ export default function Main() {
     // TODO: create hamburger menu for navigation s.t. when the user clicks on it, it opens a side menu with the different vowels
     // and when they press a specific vowel, it changes the canvas to show the spectral envelope for that vowel
     // Vowel selector state
-    const [selectedVowel, setSelectedVowel] = useState('a');
+    const [selectedVowel, setSelectedVowel] = useState('a'); //when selectedVowel changes, the canvas should update to show the spectral envelope for that vowel, and the stimulus should change to a random one from the list of stimuli for that vowel
     const vowels = [
         { label: 'A', value: 'a' },
         { label: 'E', value: 'e' },
@@ -338,9 +343,21 @@ export default function Main() {
         { label: 'O', value: 'o' },
         { label: 'U', value: 'u' },
     ];
+    
+
 
     // Add state for submodule
     const [selectedSubmodule, setSelectedSubmodule] = useState(getQueryParam('submodule') || 'Segment');
+
+    // Add state for stimulus
+    const [selectedStimulusIndex, setSelectedStimulusIndex] = useState(0); //maybe select a random stimulus from the list
+
+    //update stimulus when vowel changes
+    useEffect(() => {
+        console.log("Submodule changed to:", selectedSubmodule);
+        setSelectedStimulusIndex(randint(vowelstimuli["Vowel"][selectedVowel][selectedSubmodule].length));
+        console.log(`Selected stimulus for ${selectedVowel} ${selectedSubmodule}:`, vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex]);
+    }, [selectedVowel]);
 
     // Update submodule if URL changes
     useEffect(() => {
@@ -372,6 +389,16 @@ export default function Main() {
                         <option key={v.value} value={v.value}>{v.label}</option>
                     ))}
                 </select>
+            </div>
+            {/* Stimulus display section */}
+            <div className="stimulus-section" style={{ marginBottom: '1rem', fontWeight: 'bold', color: '#f56565', fontSize: '1.25rem' }}>
+                Say:&nbsp;
+                {vowelstimuli["Vowel"][selectedVowel] &&
+                 vowelstimuli["Vowel"][selectedVowel][selectedSubmodule] &&
+                 vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex] ?
+                    vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex]
+                    : <span style={{ color: '#9ca3af' }}>No stimulus available</span>
+                }
             </div>
             <div className="canvas-container">
                 <canvas ref={canvasRef} className="canvas" />
