@@ -409,38 +409,6 @@ export default function Main() {
         return () => window.removeEventListener('popstate', handlePopState);
     }, []);
 
-    // --- Analyze recorded audio and show LPC ---
-    const analyzeRecording = async () => {
-        console.log("Analyzing recording with LPC order:", lpcOrder);
-        if (!audioURL) {
-            console.log("No Audio URL");
-            return;
-        }
-        const context = new (window.AudioContext || window.webkitAudioContext)();
-        const response = await fetch(audioURL);
-        const arrayBuffer = await response.arrayBuffer();
-        context.decodeAudioData(arrayBuffer, (buffer) => {
-            // Take a window of samples (e.g., first 2048)
-            const samples = buffer.getChannelData(0).slice(0, 2048);
-            const windowed = applyWindow(samples);
-            const { a } = lpc(windowed, lpcOrder);
-            console.log('Decoded samples:', samples);
-            console.log('LPC coefficients:', a);
-            console.log('Sample rate:', context.sampleRate);
-            if (!ctxRef.current || !canvasRef.current) {
-                console.error('Canvas context not initialized');
-                return;
-            }
-            if (a && a.some(v => !isNaN(v) && v !== 0)) {
-                drawSpectralEnvelope(a, context.sampleRate);
-            } else {
-                console.error('LPC analysis failed: No valid coefficients returned');
-            }
-        }, (err) => {
-            console.error('Could not decode audio:', err);
-        });
-    };
-
     // Decode audio when audioURL changes
     useEffect(() => {
         if (!audioURL) return;
@@ -534,9 +502,6 @@ export default function Main() {
                     <div style={{ fontSize: '0.9rem', color: '#4299e1', marginTop: '0.5rem' }}>
                         Playback your recording above.
                     </div>
-                    <Button variant="info" onClick={analyzeRecording} style={{ marginTop: '0.5rem' }}>
-                        Show LPC of Recording
-                    </Button>
                 </div>
             )}
             <div className="canvas-container">
