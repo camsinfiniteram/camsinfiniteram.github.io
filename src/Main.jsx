@@ -54,9 +54,9 @@ export default function Main() {
             stopCapture();
         } else if (!rec) {
             startCapture();
-            setTimeLeft(duration)
             setProg(5);
-            setMess("")
+            setTimeElapsed(0);
+            setMess("Recording...");
             
         }
         setRec(r => !r);
@@ -302,28 +302,23 @@ export default function Main() {
         ctx.strokeRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
     }
 
-    const duration = 5;
-    const [timeLeft, setTimeLeft] = useState(duration);
+    const duration = 100;
+    const [timeElapsed, setTimeElapsed] = useState(0); // changed from timeLeft
     const [prog, setProg] = useState(5);
     const [isActive, setIsActive] = useState(false);
     const [mess, setMess] = useState("");
 
+    // Timer counts up
     useEffect(() => {
         if (!isActive) return;
-        if (timeLeft <= 0) {
-            setIsActive(false);
-            setMess("Time's up!");
-            stopCapture();
-            return;
-        }
         const tim = setInterval(() => {
-            if (isActive && timeLeft > 0) {
-                setTimeLeft(timeLeft - 1);
+            if (isActive) {
+                setTimeElapsed(prev => prev + 1);
                 setProg(prog - 1);
             }
         }, 1000);
         return () => clearInterval(tim)
-    }, [isActive, timeLeft, prog])
+    }, [isActive, timeElapsed, prog]);
 
     const timeFormatter = (sec) => {
         const remainingTime = sec % 60;
@@ -425,12 +420,12 @@ export default function Main() {
                     fontSize: '1.5rem',
                     fontWeight: 'bold',
                     marginBottom: '10px'}}>
-                    {timeFormatter(timeLeft)}
+                    {timeFormatter(timeElapsed)}
                 </div>
                 <div className="progress-label">
                     <span>Keep your (mountain) peaks inside the bars!</span>
                 </div>
-                <div className="progress"
+                {/*<div className="progress"
                     style={{
                         width: `${prog}%`,
                         height: '20px',
@@ -438,7 +433,7 @@ export default function Main() {
                         margin: '10px'
                     }}>
                     {mess && <div className="message">{mess}</div>}
-                </div>
+                </div>*/}
             </div>
             <div classname="foot">
                 <Button variant="success" onClick={() => window.location.href = '/Modules'}>
