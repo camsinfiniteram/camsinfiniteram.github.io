@@ -14,6 +14,14 @@ function randint(n) {
 
 export default function Main() {
 
+    //TODO: Make firefox compatible
+    useEffect(() => {
+        const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+        if (isFirefox) {
+            alert('This application may not work properly in Firefox. Please use Chrome or Edge for best compatibility. \n The live visualization works, but the recording and playback features may not function as expected.');
+        }
+    }, []);
+
     const [lpcOrder, setLpc] = useState(20)
     // NOTE: average female LPC is 9-11, average male LPC is 11-13. Notify users of this.
     // For this use case, 20 looks better, don't know why
@@ -30,6 +38,8 @@ export default function Main() {
     // state variables for recording and playback
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioURL, setAudioURL] = useState(null);
+    const audioElementRef = useRef(null);
+    const [audioBuffer, setAudioBuffer] = useState(null);
 
     const vowelstimuli = require('./VowelStimuli.json');
 
@@ -38,7 +48,7 @@ export default function Main() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         ctxRef.current = ctx;
-        const resizeCanvas = () => { //this a decent starting point for responsive canvas
+        const resizeCanvas = () => {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = 384;
             canvas.style.width = '100%';
@@ -62,7 +72,6 @@ export default function Main() {
             setProg(5);
             setTimeElapsed(0);
             setMess("Recording...");
-            
         }
         setRec(r => !r);
         setIsActive(is => !is);
@@ -94,8 +103,18 @@ export default function Main() {
             node.current.connect(audioCtx.current.destination);
 
             // --- MediaRecorder for playback ---
-            const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-            chunksRef.current = []; // reset local chunks array
+            let mimeType = '';
+
+            if (MediaRecorder.isTypeSupported('audio/wav')) {
+                mimeType = 'audio/wav';
+            } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+                mimeType = 'audio/ogg';
+            } else {
+                mimeType = 'audio/webm';
+            }
+
+            const recorder = new MediaRecorder(stream, { mimeType });
+            chunksRef.current = [];
             setMediaRecorder(recorder);
             recorder.ondataavailable = e => {
                 if (e.data.size > 0) {
@@ -103,7 +122,7 @@ export default function Main() {
                 }
             };
             recorder.onstop = () => {
-                const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+                const blob = new Blob(chunksRef.current, { type: mimeType });
                 setAudioURL(URL.createObjectURL(blob));
             };
             recorder.start();
@@ -153,7 +172,7 @@ export default function Main() {
         // LPC analysis
         const { a, err } = lpc(windowedBuffer, lpcOrder);
         if (a) {
-            drawSpectralEnvelope(a);
+            drawSpectralEnvelope(a, audioCtx.current ? audioCtx.current.sampleRate : 44100);
         } else {
             console.log('No!!!! LPC failed: ', err);
         }
@@ -233,11 +252,12 @@ export default function Main() {
      * Also adds frequency labels to the X-axis.
      * @param {Float32Array} lpcCoefficients The LPC coefficients.
      */
-    function drawSpectralEnvelope(lpcCoefficients) {
-        if (!audioCtx.current) return;
+    function drawSpectralEnvelope(lpcCoefficients, sampleRate) {
         const ctx = ctxRef.current;
         const canvas = ctx.canvas;
-        const sr = audioCtx.current.sampleRate;
+        const sr = sampleRate;
+
+        console.log("Sample Rate:", sr);
 
         ctx.fillStyle = '#1a202c'; //TODO: make the background color match the theme
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -389,6 +409,94 @@ export default function Main() {
         return () => window.removeEventListener('popstate', handlePopState);
     }, []);
 
+    // --- Analyze recorded audio and show LPC ---
+    const analyzeRecording = async () => {
+        console.log("Analyzing recording with LPC order:", lpcOrder);
+        if (!audioURL) {
+            console.log("No Audio URL");
+            return;
+        }
+        const context = new (window.AudioContext || window.webkitAudioContext)();
+        const response = await fetch(audioURL);
+        const arrayBuffer = await response.arrayBuffer();
+        context.decodeAudioData(arrayBuffer, (buffer) => {
+            // Take a window of samples (e.g., first 2048)
+            const samples = buffer.getChannelData(0).slice(0, 2048);
+            const windowed = applyWindow(samples);
+            const { a } = lpc(windowed, lpcOrder);
+            console.log('Decoded samples:', samples);
+            console.log('LPC coefficients:', a);
+            console.log('Sample rate:', context.sampleRate);
+            if (!ctxRef.current || !canvasRef.current) {
+                console.error('Canvas context not initialized');
+                return;
+            }
+            if (a && a.some(v => !isNaN(v) && v !== 0)) {
+                drawSpectralEnvelope(a, context.sampleRate);
+            } else {
+                console.error('LPC analysis failed: No valid coefficients returned');
+            }
+        }, (err) => {
+            console.error('Could not decode audio:', err);
+        });
+    };
+
+    // Decode audio when audioURL changes
+    useEffect(() => {
+        if (!audioURL) return;
+        const context = new (window.AudioContext || window.webkitAudioContext)();
+        fetch(audioURL)
+            .then(res => res.arrayBuffer())
+            .then(arrayBuffer => {
+                context.decodeAudioData(arrayBuffer, buffer => {
+                    setAudioBuffer(buffer);
+                });
+            });
+    }, [audioURL]);
+
+    // Update LPC analysis during playback
+    useEffect(() => {
+        const audioEl = audioElementRef.current;
+        if (!audioEl || !audioBuffer) return;
+        const context = audioBuffer;
+        let rafId = null;
+        const updateLPC = () => {
+            if (!audioEl.paused && !audioEl.ended) {
+                const sr = context.sampleRate;
+                const pos = Math.floor(audioEl.currentTime * sr);
+                const windowSize = 2048;
+                let samples = new Float32Array(windowSize);
+                if (pos + windowSize < context.length) {
+                    samples = context.getChannelData(0).slice(pos, pos + windowSize);
+                } else {
+                    samples = context.getChannelData(0).slice(context.length - windowSize);
+                }
+                const windowed = applyWindow(samples);
+                const { a } = lpc(windowed, lpcOrder);
+                if (a && ctxRef.current && canvasRef.current) {
+                    drawSpectralEnvelope(a, sr);
+                }
+                rafId = requestAnimationFrame(updateLPC);
+            }
+        };
+        const startRaf = () => {
+            if (!rafId) rafId = requestAnimationFrame(updateLPC);
+        };
+        const stopRaf = () => {
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = null;
+        };
+        audioEl.addEventListener('play', startRaf);
+        audioEl.addEventListener('pause', stopRaf);
+        audioEl.addEventListener('ended', stopRaf);
+        return () => {
+            stopRaf();
+            audioEl.removeEventListener('play', startRaf);
+            audioEl.removeEventListener('pause', stopRaf);
+            audioEl.removeEventListener('ended', stopRaf);
+        };
+    }, [audioBuffer, lpcOrder]);
+
     return (
         <Container className="main">
             <Nav className="navbar"></Nav>
@@ -419,13 +527,16 @@ export default function Main() {
                     : <span style={{ color: '#9ca3af' }}>No stimulus available</span>
                 }
             </div>
-            {/* --- Playback UI --- */}
+            {/* --- Playback UI & LPC analysis button --- */}
             {audioURL && (
                 <div style={{ marginBottom: '1rem' }}>
-                    <audio controls src={audioURL} />
+                    <audio controls src={audioURL} ref={audioElementRef} />
                     <div style={{ fontSize: '0.9rem', color: '#4299e1', marginTop: '0.5rem' }}>
                         Playback your recording above.
                     </div>
+                    <Button variant="info" onClick={analyzeRecording} style={{ marginTop: '0.5rem' }}>
+                        Show LPC of Recording
+                    </Button>
                 </div>
             )}
             <div className="canvas-container">
