@@ -14,6 +14,16 @@ function randint(n) {
 
 export default function Main() {
 
+         // Toggle to adjust playback speed
+            const speeds = [1, 0.75, 0.5];
+            const [currSpeed, setCurrSpeed] = useState(1); // default speed
+    const adjustPlaybackSpeed = newRate => {
+        if (audioElementRef.current) {
+            audioElementRef.current.playbackRate = newRate;
+        }
+       setCurrSpeed(newRate);
+    };
+
     //TODO: Make firefox compatible
     useEffect(() => {
         const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
@@ -502,6 +512,18 @@ export default function Main() {
                     <div style={{ fontSize: '0.9rem', color: '#4299e1', marginTop: '0.5rem' }}>
                         Playback your recording above.
                     </div>
+                <div className="toggle-speed" style={{ marginBottom: '1rem' }}>
+                <label htmlFor="speedSelect">Playback Speed:</label>
+                <select
+                    id="speedSelect"
+                    value={currSpeed}
+                    onChange={e => adjustPlaybackSpeed(parseFloat(e.target.value))}
+                >
+                    {speeds.map(s => (
+                        <option key={s} value={s}>{s}x</option>
+                    ))}
+                </select>
+            </div>
                 </div>
             )}
             <div className="canvas-container">
