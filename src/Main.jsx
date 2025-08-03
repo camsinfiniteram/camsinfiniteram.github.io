@@ -378,11 +378,11 @@ export default function Main() {
     // Vowel selector state
     const [selectedVowel, setSelectedVowel] = useState('a'); //when selectedVowel changes, the canvas should update to show the spectral envelope for that vowel, and the stimulus should change to a random one from the list of stimuli for that vowel
     const vowels = [
-        { label: 'A', value: 'a' },
-        { label: 'E', value: 'e' },
-        { label: 'I', value: 'i' },
-        { label: 'O', value: 'o' },
-        { label: 'U', value: 'u' },
+        { label: '[a]', value: 'a' },
+        { label: '[e]', value: 'e' },
+        { label: '[i]', value: 'i' },
+        { label: '[o]', value: 'o' },
+        { label: '[u]', value: 'u' },
     ];
     
 
