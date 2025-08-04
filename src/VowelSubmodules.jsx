@@ -3,6 +3,7 @@ import SubmoduleDropdown from './SubmoduleDropdown'
 export default function VowelSubmodules() {
   const vowelItems = [
     { label: 'Segment',  path: '../Main?submodule=Segment' },
+    { label: 'Syllable', path: '../Main?submodule=Syllable' },
     { label: 'Word',     path: '../Main?submodule=Word' },
     { label: 'Phrase',   path: '../Main?submodule=Phrase' },
     { label: 'Sentence', path: '../Main?submodule=Sentence' }

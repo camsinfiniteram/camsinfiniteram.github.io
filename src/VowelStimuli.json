@@ -1,15 +1,19 @@
+
+
 {
+    "version": "1.0",
+    "description": "Vowel stimuli. Formants are from Martínez Celdrán (1995). ",
     "Vowel": {
         "i": {
             "ipa": "i",
             "description": "/i/: Close front unrounded vowel",
             "formant": {
-                "f1": [265, 286],
-                "f2": [2147, 2318],
-                "f1_low": 265,
-                "f1_high": 286,
-                "f2_low": 2147,
-                "f2_high": 2318
+                "f1": [258, 448],
+                "f2": [2151, 2687],
+                "f1_low": 258,
+                "f1_high": 448,
+                "f2_low": 2151,
+                "f2_high": 2687
             },
             "Segment": [
                 "i",
@@ -19,64 +23,64 @@
                 "i"
             ],
             "Syllable": [
-                "bi",
-                "di",
-                "gui",
-                "pi",
-                "ti",
-                "qui",
-                "ni",
-                "mi",
-                "li",
-                "ri"
+                ["bi", 1],
+                ["di", 1],
+                ["gui", 2],
+                ["pi", 1],
+                ["ti", 1],
+                ["qui", 2],
+                ["ni", 1],
+                ["mi", 1],
+                ["li", 1],
+                ["ri", 1]
             ],
             "Word": [
-                "cine",
-                "vino",
-                "liso",
-                "piso",
-                "rico",
-                "risa",
-                "niño",
-                "libro",
-                "fino",
-                "nido"
+                ["cine", 1],
+                ["vino", 1],
+                ["liso", 1],
+                ["piso", 1],
+                ["rico", 1],
+                ["risa", 1],
+                ["niño", 1],
+                ["libro", 1],
+                ["fino", 1],
+                ["nido", 1]
             ],
             "Phrase": [
-                "cine grande",
-                "vino frío",
-                "muy liso",
-                "piso limpio",
-                "rico postre",
-                "risa contagiosa",
-                "niño listo",
-                "libro viejo",
-                "fino detalle",
-                "nido vacío"
+                ["el gran cine", 9],
+                ["buen vino", 6],
+                ["cabello liso", 10],
+                ["piso limpio", 1],
+                ["rico postre", 1],
+                ["risa contagiosa", 1],
+                ["niño listo", 1],
+                ["libro viejo", 1],
+                ["fino detalle", 1],
+                ["nido vacío", 1]
             ],
             "Sentence": [
-                "Hay un cine grande",
-                "El vino es muy frío",
-                "El cabello es muy liso",
-                "Camina por el piso limpio",
-                "Gracias por el rico postre",
-                "Tiene una risa contagiosa",
-                "El niño es listo",
-                "Mi libro está en la mesa",
-                "Cuento el detalle fino",
-                "El nido es vacío"
+                ["Vemos el gran cine", 15],
+                ["Tenemos el buen vino", 17],
+                ["Ella tiene el cabello liso, sin ondas", 23],
+                ["Camina por el piso limpio", 15],
+                ["Gracias por el rico postre", 16],
+                ["Nadie olvida su risa contagiosa", 17],
+                ["Habla el niño listo", 10],
+                ["El profesor tiene un libro viejo", 22],
+                ["Cuento un fino detalle", 11],
+                ["Aún está solo el nido vacío.", 18]
             ]
         },
         "e": {
             "ipa": "e",
             "description": "/e/: Close-mid front unrounded vowel",
             "formant": {
-                "f1": [436, 458],
-                "f2": [1814, 1995],
-                "f1_low": 436,
-                "f1_high": 458,
-                "f2_low": 1814,
-                "f2_high": 1995
+                "f1": [380, 691],
+                "f2": [1892, 2462],
+                "f1_low": 380,
+                "f1_high": 691,
+                "f2_low": 1892,
+                "f2_high": 2462
             },
             "Segment": [
                 "e",
@@ -138,12 +142,12 @@
             "ipa": "a",
             "description": "/a/: Open front unrounded vowel",
             "formant": {
-                "f1": [638, 657],
-                "f2": [1215, 1353],
-                "f1_low": 638,
-                "f1_high": 657,
-                "f2_low": 1215,
-                "f2_high": 1353
+                "f1": [605, 1045],
+                "f2": [1399, 1780],
+                "f1_low": 605,
+                "f1_high": 1045,
+                "f2_low": 1399,
+                "f2_high": 1780
             },
             "Segment": [
                 "a",
@@ -203,12 +207,12 @@
             "ipa": "o",
             "description": "/o/: Close-mid back rounded vowel",
             "formant": {
-                "f1": [460, 475],
-                "f2": [888, 1019],
-                "f1_low": 460,
-                "f1_high": 475,
-                "f2_low": 888,
-                "f2_high": 1019
+                "f1": [395, 725],
+                "f2": [871, 1460],
+                "f1_low": 395,
+                "f1_high": 725,
+                "f2_low": 871,
+                "f2_high": 1460
             },
             "Segment": [
                 "o",
@@ -270,12 +274,12 @@
             "ipa": "u",
             "description": "/u/: Close back rounded vowel",
             "formant": {
-                "f1": [394, 322],
-                "f2": [669, 992],
-                "f1_low": 394,
-                "f1_high": 322,
-                "f2_low": 669,
-                "f2_high": 992
+                "f1": [285, 474],
+                "f2": [570, 1227],
+                "f1_low": 285,
+                "f1_high": 474,
+                "f2_low": 570,
+                "f2_high": 1227
             },
             "Segment": [
                 "u",

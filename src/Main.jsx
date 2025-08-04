@@ -14,9 +14,9 @@ function randint(n) {
 
 export default function Main() {
 
-         // Toggle to adjust playback speed
-            const speeds = [1, 0.75, 0.5];
-            const [currSpeed, setCurrSpeed] = useState(1); // default speed
+    // Toggle to adjust playback speed
+    const speeds = [1, 0.75, 0.5];
+    const [currSpeed, setCurrSpeed] = useState(1); // default speed
     const adjustPlaybackSpeed = newRate => {
         if (audioElementRef.current) {
             audioElementRef.current.playbackRate = newRate;
@@ -402,11 +402,48 @@ export default function Main() {
 
     // Add state for stimulus
     const [selectedStimulusIndex, setSelectedStimulusIndex] = useState(0); //maybe select a random stimulus from the list
+    const [selectedStimulus, setSelectedStimulus] = useState(null);
 
-    //update stimulus when vowel changes
+    //update stimulus and graph when vowel changes
     useEffect(() => {
         //console.log("Submodule changed to:", selectedSubmodule);
         setSelectedStimulusIndex(randint(vowelstimuli["Vowel"][selectedVowel][selectedSubmodule].length));
+        let stim = vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex];
+        if (!stim) {
+            setSelectedStimulus("No stimulus available");
+        }
+        else if (typeof stim === 'string') {
+            setSelectedStimulus(stim);
+        } else if (typeof stim === 'object' && Array.isArray(stim)) {
+            let hstart;
+            let hend;
+            if (typeof(stim[1]) === 'number') {
+                hstart = stim[1];
+                hend = hstart + 1;
+            }
+            else if (typeof(stim[1]) === 'object' && Array.isArray(stim[1])) {
+                hstart = stim[1][0];
+                hend = stim[1][1];
+            } else {
+                console.error("Error: Invalid stimulus format: highlighted segment indexes unrecognized", stim);
+            }
+
+            // Replace <highlight> tags with a span for visual highlighting
+            setSelectedStimulus(
+                `${stim[0].slice(0, hstart)}<span style="background: #ffe066; color: #222; padding: 0 2px;">${stim[0].slice(hstart, hend)}</span>${stim[0].slice(hend)}`
+            ); //TODO: injecting the highlighting in this way is probably not the best way, but it works for now
+
+        }
+        else {
+            setSelectedStimulus("Error: Invalid stimulus format" + JSON.stringify(stim));
+        }
+
+        // Update the canvas by restarting the audio capture if running
+        if (audioCtx.current) {
+            stopCapture();
+            startCapture();
+        }
+
         //console.log(`Selected stimulus for ${selectedVowel} ${selectedSubmodule}:`, vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex]);
     }, [selectedVowel]);
 
@@ -498,12 +535,11 @@ export default function Main() {
             {/* Stimulus display section */}
             <div className="stimulus-section" style={{ marginBottom: '1rem', fontWeight: 'bold', color: '#f56565', fontSize: '1.25rem' }}>
                 Say:&nbsp;
-                {vowelstimuli["Vowel"][selectedVowel] &&
-                 vowelstimuli["Vowel"][selectedVowel][selectedSubmodule] &&
-                 vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex] ?
-                    vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex]
-                    : <span style={{ color: '#9ca3af' }}>No stimulus available</span>
-                }
+                {selectedStimulus ? (
+                    <span dangerouslySetInnerHTML={{ __html: selectedStimulus }} />
+                ) : (
+                    <span style={{ color: '#9ca3af' }}>No stimulus available</span>
+                )}
             </div>
             {/* --- Playback UI & LPC analysis button --- */}
             {audioURL && (
