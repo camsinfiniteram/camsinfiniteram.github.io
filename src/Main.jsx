@@ -401,13 +401,14 @@ export default function Main() {
     const [selectedSubmodule, setSelectedSubmodule] = useState(getQueryParam('submodule') || 'Segment');
 
     // Add state for stimulus
-    const [selectedStimulusIndex, setSelectedStimulusIndex] = useState(0); //maybe select a random stimulus from the list
     const [selectedStimulus, setSelectedStimulus] = useState(null);
 
     //update stimulus and graph when vowel changes
     useEffect(() => {
         //console.log("Submodule changed to:", selectedSubmodule);
-        setSelectedStimulusIndex(randint(vowelstimuli["Vowel"][selectedVowel][selectedSubmodule].length));
+
+        let selectedStimulusIndex = randint(vowelstimuli["Vowel"][selectedVowel][selectedSubmodule].length)
+
         let stim = vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex];
         if (!stim) {
             setSelectedStimulus("No stimulus available");
