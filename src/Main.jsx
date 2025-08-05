@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Button, Nav } from 'react-bootstrap';
-import { applyWindow, lpc } from './lpcUtils';
+import { applyWindow, lpc, drawSpectralEnvelope } from './lpcUtils';
 
 // Add this helper to parse query params
 function getQueryParam(name) {
@@ -182,111 +182,17 @@ export default function Main() {
         // LPC analysis
         const { a, err } = lpc(windowedBuffer, lpcOrder);
         if (a) {
-            drawSpectralEnvelope(a, audioCtx.current ? audioCtx.current.sampleRate : 44100);
+            drawSpectralEnvelope({
+                lpcCoefficients: a,
+                sampleRate: audioCtx.current ? audioCtx.current.sampleRate : 44100,
+                canvasContext: ctxRef.current,
+                vowelStimuli: vowelstimuli,
+                selectedVowel
+            });
         } else {
             console.log('No!!!! LPC failed: ', err);
         }
 
-    }
-
-    /**
-     * Draws the spectral envelope on the canvas, scaled to 0-5000Hz.
-     * Also adds frequency labels to the X-axis.
-     * @param {Float32Array} lpcCoefficients The LPC coefficients.
-     */
-    function drawSpectralEnvelope(lpcCoefficients, sampleRate) {
-        const ctx = ctxRef.current;
-        const canvas = ctx.canvas;
-        const sr = sampleRate;
-
-        console.log("Sample Rate:", sr);
-
-        ctx.fillStyle = '#1a202c'; //TODO: make the background color match the theme
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        const maxFreq = 5000;
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#374151'; //TODO: make the grid color match the theme
-        ctx.fillStyle = '#9ca3af'; //TODO: make the text color match the theme
-        ctx.font = '12px Inter';
-
-        // Draw X-axis labels and grid lines
-        const numGridLines = 5;
-        for (let i = 0; i <= numGridLines; i++) {
-            const freq = (maxFreq / numGridLines) * i;
-            const x = (freq / maxFreq) * canvas.width;
-            if (i > 0) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height - 20);
-                ctx.stroke();
-            }
-            const label = `${freq / 1000}k`;
-            ctx.fillText(label, x - (i === 0 ? 0 : 10), canvas.height - 5);
-        }
-        // Draw horizontal line at the bottom
-        ctx.beginPath();
-        ctx.moveTo(0, canvas.height - 20);
-        ctx.lineTo(canvas.width, canvas.height - 20);
-        ctx.stroke();
-
-        // --- Calculate and Draw LPC Curve in dB ---
-        ctx.strokeStyle = '#4299e1';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-
-        const numPoints = canvas.width;
-        const freqResponse = new Float32Array(numPoints);
-        let maxDb = -Infinity, minDb = Infinity;
-
-        for (let i = 0; i < numPoints; i++) {
-            const freq = (i / numPoints) * maxFreq;
-            const w = 2 * Math.PI * freq / sr;
-            let re = 1.0, im = 0.0;
-            for (let k = 1; k < lpcCoefficients.length; k++) {
-                re += lpcCoefficients[k] * Math.cos(k * w);
-                im += lpcCoefficients[k] * Math.sin(k * w);
-            }
-            const mag = 1.0 / Math.sqrt(re * re + im * im);
-            // Convert to dB, add small value to avoid log(0)
-            const db = 20 * Math.log10(mag + 1e-12);
-            freqResponse[i] = db;
-            if (db > maxDb) maxDb = db;
-            if (db < minDb) minDb = db;
-        }
-
-        // Draw the curve, scaling dB to canvas height
-        for (let i = 0; i < numPoints; i++) {
-            const x = i;
-            // Map dB to y (top = maxDb, bottom = minDb)
-            const y = ((maxDb - freqResponse[i]) / (maxDb - minDb)) * (canvas.height - 25) + 5;
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        }
-        ctx.stroke();
-
-        // draw the vertical boxes for F1/F2 formants
-        // Import formant data for vowels
-        if (!vowelstimuli || !vowelstimuli["Vowel"][selectedVowel]) {
-            console.error('Selected vowel data not found:', selectedVowel);
-            return;
-        }
-        const f1_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f1"];
-        const f2_range = vowelstimuli["Vowel"][selectedVowel]["formant"]["f2"];
-        const f1_start = (f1_range[0] / maxFreq) * canvas.width;
-        const f1_end = (f1_range[1] / maxFreq) * canvas.width;
-        const f2_start = (f2_range[0] / maxFreq) * canvas.width;
-        const f2_end = (f2_range[1] / maxFreq) * canvas.width;
-        //draw a transparent rectangle for F1
-        ctx.fillStyle = 'rgba(245, 101, 101, 0.2)';
-        ctx.strokeStyle = '#f56565';
-        ctx.fillRect(f1_start, 0, f1_end - f1_start, canvas.height - 20);
-        ctx.strokeRect(f1_start, 0, f1_end - f1_start, canvas.height - 20);
-        //draw a transparent rectangle for F2
-        ctx.fillRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
-        ctx.strokeRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
     }
 
     const duration = 100;
@@ -411,7 +317,13 @@ export default function Main() {
                 const windowed = applyWindow(samples);
                 const { a } = lpc(windowed, lpcOrder);
                 if (a && ctxRef.current && canvasRef.current) {
-                    drawSpectralEnvelope(a, sr);
+                    drawSpectralEnvelope({
+                        lpcCoefficients: a,
+                        sampleRate: sr,
+                        canvasContext: ctxRef.current,
+                        vowelStimuli: vowelstimuli,
+                        selectedVowel
+                    });
                 }
                 rafId = requestAnimationFrame(updateLPC);
             }
