@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Button, Nav } from 'react-bootstrap';
+import { applyWindow, lpc } from './lpcUtils';
 
 // Add this helper to parse query params
 function getQueryParam(name) {
@@ -81,7 +82,6 @@ export default function Main() {
             startCapture();
             setProg(5);
             setTimeElapsed(0);
-            setMess("Recording...");
         }
         setRec(r => !r);
         setIsActive(is => !is);
@@ -190,74 +190,6 @@ export default function Main() {
     }
 
     /**
-     * Applies a Hamming window to the buffer.
-     * @param {Float32Array} buffer The input signal.
-     * @returns {Float32Array} The windowed signal.
-     */
-    function applyWindow(buffer) {
-        const N = buffer.length;
-        const windowed = new Float32Array(N);
-        for (let i = 0; i < N; i++) {
-            windowed[i] = buffer[i] * (0.54 - 0.46 * Math.cos(2 * Math.PI * i / (N - 1))); //These are the coefficients for the Hamming window, which is commonly used in signal processing to reduce spectral leakage. (no idea what that means, but it sounds important)
-        }
-        return windowed;
-    }
-
-
-    /**
-     * Calculates the LPC coefficients for a given signal.
-     * @param {Float32Array} signal The input signal.
-     * @param {number} p The order of the LPC analysis.
-     * @returns {{a: Float32Array | null, err: number}} The LPC coefficients and the prediction error.
-     */
-    function lpc(signal, p) {
-        const n = signal.length;
-        if (p >= n) return { a: null, err: 0 };
-
-        // Autocorrelation
-        const R = new Float32Array(p + 1);
-        for (let i = 0; i <= p; i++) {
-            let sum = 0;
-            for (let j = 0; j < n - i; j++) {
-                sum += signal[j] * signal[j + i];
-            }
-            R[i] = sum;
-        }
-
-        // Levinson-Durbin recursion
-        let a = new Float32Array(p + 1);
-        let a_prev = new Float32Array(p + 1);
-        let err = R[0];
-
-        if (Math.abs(err) < 1e-9) { // If signal is silent, return zero coefficients
-            return { a: new Float32Array(p + 1), err: 0 };
-        }
-
-        a[0] = 1.0;
-
-        for (let i = 1; i <= p; i++) {
-            let k = -R[i];
-            for (let j = 1; j < i; j++) {
-                k -= a_prev[j] * R[i - j];
-            }
-            k /= err;
-
-            a[i] = k;
-            for (let j = 1; j < i; j++) {
-                a[j] = a_prev[j] + k * a_prev[i - j];
-            }
-
-            err *= (1 - k * k);
-
-            // Save current 'a' for next iteration
-            for (let j = 1; j <= i; j++) a_prev[j] = a[j];
-        }
-
-        return { a, err };
-    }
-
-
-    /**
      * Draws the spectral envelope on the canvas, scaled to 0-5000Hz.
      * Also adds frequency labels to the X-axis.
      * @param {Float32Array} lpcCoefficients The LPC coefficients.
@@ -347,13 +279,12 @@ export default function Main() {
         const f1_end = (f1_range[1] / maxFreq) * canvas.width;
         const f2_start = (f2_range[0] / maxFreq) * canvas.width;
         const f2_end = (f2_range[1] / maxFreq) * canvas.width;
-        ctx.strokeStyle = '#f56565';
         //draw a transparent rectangle for F1
         ctx.fillStyle = 'rgba(245, 101, 101, 0.2)';
+        ctx.strokeStyle = '#f56565';
         ctx.fillRect(f1_start, 0, f1_end - f1_start, canvas.height - 20);
         ctx.strokeRect(f1_start, 0, f1_end - f1_start, canvas.height - 20);
         //draw a transparent rectangle for F2
-        ctx.fillStyle = 'rgba(245, 101, 101, 0.2)';
         ctx.fillRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
         ctx.strokeRect(f2_start, 0, f2_end - f2_start, canvas.height - 20);
     }
@@ -362,7 +293,6 @@ export default function Main() {
     const [timeElapsed, setTimeElapsed] = useState(0); // changed from timeLeft
     const [prog, setProg] = useState(5);
     const [isActive, setIsActive] = useState(false);
-    const [mess, setMess] = useState("");
 
     // Timer counts up
     useEffect(() => {
@@ -394,21 +324,15 @@ export default function Main() {
         { label: '[o]', value: 'o' },
         { label: '[u]', value: 'u' },
     ];
-    
-
-
     // Add state for submodule
     const [selectedSubmodule, setSelectedSubmodule] = useState(getQueryParam('submodule') || 'Segment');
-
     // Add state for stimulus
     const [selectedStimulus, setSelectedStimulus] = useState(null);
 
     //update stimulus and graph when vowel changes
     useEffect(() => {
         //console.log("Submodule changed to:", selectedSubmodule);
-
         let selectedStimulusIndex = randint(vowelstimuli["Vowel"][selectedVowel][selectedSubmodule].length)
-
         let stim = vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex];
         if (!stim) {
             setSelectedStimulus("No stimulus available");
@@ -433,7 +357,6 @@ export default function Main() {
             setSelectedStimulus(
                 `${stim[0].slice(0, hstart)}<span style="background: #ffe066; color: #222; padding: 0 2px;">${stim[0].slice(hstart, hend)}</span>${stim[0].slice(hend)}`
             ); //TODO: injecting the highlighting in this way is probably not the best way, but it works for now
-
         }
         else {
             setSelectedStimulus("Error: Invalid stimulus format" + JSON.stringify(stim));
@@ -444,8 +367,6 @@ export default function Main() {
             stopCapture();
             startCapture();
         }
-
-        //console.log(`Selected stimulus for ${selectedVowel} ${selectedSubmodule}:`, vowelstimuli["Vowel"][selectedVowel][selectedSubmodule][selectedStimulusIndex]);
     }, [selectedVowel]);
 
     // Update submodule if URL changes
