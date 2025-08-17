@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Container, Button, Nav } from 'react-bootstrap';
+import {StyleSheet} from 'react-native';
 import { applyWindow, lpc, drawSpectralEnvelope } from './lpcUtils';
 
 // Add this helper to parse query params
@@ -195,7 +196,7 @@ export default function Main() {
 
     }
 
-    const duration = 100;
+    //const duration = 100;
     const [timeElapsed, setTimeElapsed] = useState(0); // changed from timeLeft
     const [prog, setProg] = useState(5);
     const [isActive, setIsActive] = useState(false);
@@ -273,7 +274,11 @@ export default function Main() {
             stopCapture();
             startCapture();
         }
-    }, [selectedVowel]);
+    }, [selectedVowel
+
+
+
+    ]);
 
     // Update submodule if URL changes
     useEffect(() => {
@@ -347,18 +352,20 @@ export default function Main() {
     }, [audioBuffer, lpcOrder]);
 
     return (
+        <div className="main-container" style={{ backgroundColor: '#dde5b6', width: '100vw', height: '100vh' }}> 
         <Container className="main">
             <Nav className="navbar"></Nav>
-            <h1 className="header">LPC Analysis</h1>
+            <h1 className="header" style={styles.header}>LPC Analysis</h1>
             {/* Show selected submodule */}
-            <div style={{ marginBottom: '1rem', fontWeight: 'bold', color: '#4299e1' }}>
+            <div style={styles.submodule}>
                 Submodule: {selectedSubmodule}
             </div>
             <div className="vowel-selector" style={{ marginBottom: '1rem' }}>
-                <label htmlFor="vowelSelect" style={{ marginRight: '0.5rem' }}>Vowel:</label>
+                <label htmlFor="vowelSelect" style={styles.vowelContainer}>Vowel:</label>
                 <select
                     id="vowelSelect"
                     value={selectedVowel}
+                    style={styles.vowelSelect}
                     onChange={e => setSelectedVowel(e.target.value)}
                 >
                     {vowels.map(v => (
@@ -367,7 +374,7 @@ export default function Main() {
                 </select>
             </div>
             {/* Stimulus display section */}
-            <div className="stimulus-section" style={{ marginBottom: '1rem', fontWeight: 'bold', color: '#f56565', fontSize: '1.25rem' }}>
+            <div className="stimulus-section" style={styles.submodule}>
                 Say:&nbsp;
                 {selectedStimulus ? (
                     <span dangerouslySetInnerHTML={{ __html: selectedStimulus }} />
@@ -377,12 +384,12 @@ export default function Main() {
             </div>
             {/* --- Playback UI & LPC analysis button --- */}
             {audioURL && (
-                <div style={{ marginBottom: '1rem' }}>
+                <div style={styles.buttons}>
                     <audio controls src={audioURL} ref={audioElementRef} />
                     <div style={{ fontSize: '0.9rem', color: '#4299e1', marginTop: '0.5rem' }}>
                         Playback your recording above.
                     </div>
-                <div className="toggle-speed" style={{ marginBottom: '1rem' }}>
+                <div className="toggle-speed" style={styles.buttons}>
                 <label htmlFor="speedSelect">Playback Speed:</label>
                 <select
                     id="speedSelect"
@@ -396,7 +403,7 @@ export default function Main() {
             </div>
                 </div>
             )}
-            <div className="canvas-container">
+            <div className="canvas-container" style={styles.canvasContainer}>
                 <canvas ref={canvasRef} className="canvas" />
             </div>
             <div className="controls">
@@ -404,7 +411,7 @@ export default function Main() {
                     {rec ? 'Stop' : 'Start'} Capture Audio
                 </Button>
             </div>
-            <div className="lpc-order">
+            <div className="lpc-order" stlyes={styles.canvasContainer}>
                 <label htmlFor="lpcOrder">LPC Order:</label>
                 <input
                     type="number"
@@ -415,35 +422,66 @@ export default function Main() {
                     max="30"
                 />
             </div>
-            <div className="timer-container">
-                <div id="timer"
-                style={{
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold',
-                    marginBottom: '10px'}}>
-                    {timeFormatter(timeElapsed)}
-                </div>
-                <div className="progress-label">
-                    <span>Keep your (mountain) peaks inside the bars!</span>
-                </div>
-                {/*<div className="progress"
-                    style={{
-                        width: `${prog}%`,
-                        height: '20px',
-                        backgroundColor: '#080133',
-                        margin: '10px'
-                    }}>
-                    {mess && <div className="message">{mess}</div>}
-                </div>*/}
-            </div>
-            <div classname="foot">
-                <Button variant="success" onClick={() => window.location.href = '/Modules'}>
-                    Back
-                </Button>
-            </div>
 
         </Container>
+        </div>
     )
 }
 
+const styles = StyleSheet.create({
+    main: {
+        backgroundColor: '#dde5b6',
+        color: '#6c584c',
+    },
+      header: {
+        textAlign: 'center',
+        marginBottom: '1rem',
+        backgroundColor: '#6c584c',
+        color: '#f0ead2',
+        fontSize: '2rem',
+        fontWeight: 'bold',
+    },
+    submodule: {
+        textAlign: 'center',
+        marginBottom: '1rem',
+        backgroundColor: '#adc178',
+        color: '#6c584c',
+        fontSize: '1.25rem',
+        fontWeight: 'bold',
+        padding: '1rem',
+       
+
+    },
+    vowelContainer: {
+        padding: '0.25rem',
+        borderRadius: '0.25rem',
+        backgroundColor: '#f0ead2',
+        color: '#6c584c',
+        fontSize: '1.5rem',
+    },
+    vowelSelect: {
+        marginLeft: '0.5rem',
+        padding: '0.25rem',
+        borderRadius: '0.25rem',
+        border: '1px solid #6c584c',
+        backgroundColor: '#f0ead2',
+        color: '#6c584c',
+        fontSize: '1.5rem',
+    },
+    buttons: {
+        buttonBg: '#6c584c',
+        buttonText: '#f0ead2',
+        buttonHoverBg: '#f0ead2',
+        buttonHoverText: '#6c584c',
+    },
+    canvasContainer: {
+        fontSize: '1rem',
+        color: '#6c584c',
+        fontWeight: 'bold',
+        padding: '1rem',
+        textAlign: 'center',
+
+    }
+
+});
 

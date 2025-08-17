@@ -1,5 +1,3 @@
-
-
 {
     "version": "1.0",
     "description": "Vowel stimuli. Formants are from Martínez Celdrán (1995). ",
@@ -8,8 +6,14 @@
             "ipa": "i",
             "description": "/i/: Close front unrounded vowel",
             "formant": {
-                "f1": [258, 448],
-                "f2": [2151, 2687],
+                "f1": [
+                    258,
+                    448
+                ],
+                "f2": [
+                    2151,
+                    2687
+                ],
                 "f1_low": 258,
                 "f1_high": 448,
                 "f2_low": 2151,
@@ -23,60 +27,186 @@
                 "i"
             ],
             "Syllable": [
-                ["bi", 1],
-                ["di", 1],
-                ["gui", 2],
-                ["pi", 1],
-                ["ti", 1],
-                ["qui", 2],
-                ["ni", 1],
-                ["mi", 1],
-                ["li", 1],
-                ["ri", 1]
+                [
+                    "bi",
+                    1
+                ],
+                [
+                    "di",
+                    1
+                ],
+                [
+                    "gui",
+                    2
+                ],
+                [
+                    "pi",
+                    1
+                ],
+                [
+                    "ti",
+                    1
+                ],
+                [
+                    "qui",
+                    2
+                ],
+                [
+                    "ni",
+                    1
+                ],
+                [
+                    "mi",
+                    1
+                ],
+                [
+                    "li",
+                    1
+                ],
+                [
+                    "ri",
+                    1
+                ]
             ],
             "Word": [
-                ["cine", 1],
-                ["vino", 1],
-                ["liso", 1],
-                ["piso", 1],
-                ["rico", 1],
-                ["risa", 1],
-                ["niño", 1],
-                ["libro", 1],
-                ["fino", 1],
-                ["nido", 1]
+                [
+                    "cine",
+                    1
+                ],
+                [
+                    "vino",
+                    1
+                ],
+                [
+                    "liso",
+                    1
+                ],
+                [
+                    "piso",
+                    1
+                ],
+                [
+                    "rico",
+                    1
+                ],
+                [
+                    "risa",
+                    1
+                ],
+                [
+                    "niño",
+                    1
+                ],
+                [
+                    "libro",
+                    1
+                ],
+                [
+                    "fino",
+                    1
+                ],
+                [
+                    "nido",
+                    1
+                ]
             ],
             "Phrase": [
-                ["el gran cine", 9],
-                ["buen vino", 6],
-                ["cabello liso", 10],
-                ["piso limpio", 1],
-                ["rico postre", 1],
-                ["risa contagiosa", 1],
-                ["niño listo", 1],
-                ["libro viejo", 1],
-                ["fino detalle", 1],
-                ["nido vacío", 1]
+                [
+                    "el gran cine",
+                    9
+                ],
+                [
+                    "buen vino",
+                    6
+                ],
+                [
+                    "cabello liso",
+                    10
+                ],
+                [
+                    "piso limpio",
+                    1
+                ],
+                [
+                    "rico postre",
+                    1
+                ],
+                [
+                    "risa contagiosa",
+                    1
+                ],
+                [
+                    "niño listo",
+                    1
+                ],
+                [
+                    "libro viejo",
+                    1
+                ],
+                [
+                    "fino detalle",
+                    1
+                ],
+                [
+                    "nido vacío",
+                    1
+                ]
             ],
             "Sentence": [
-                ["Vemos el gran cine", 15],
-                ["Tenemos el buen vino", 17],
-                ["Ella tiene el cabello liso, sin ondas", 23],
-                ["Camina por el piso limpio", 15],
-                ["Gracias por el rico postre", 16],
-                ["Nadie olvida su risa contagiosa", 17],
-                ["Habla el niño listo", 10],
-                ["El profesor tiene un libro viejo", 22],
-                ["Cuento un fino detalle", 11],
-                ["Aún está solo el nido vacío.", 18]
+                [
+                    "Vemos el gran cine",
+                    15
+                ],
+                [
+                    "Tenemos el buen vino",
+                    17
+                ],
+                [
+                    "Ella tiene el cabello liso, sin ondas",
+                    23
+                ],
+                [
+                    "Camina por el piso limpio",
+                    15
+                ],
+                [
+                    "Gracias por el rico postre",
+                    16
+                ],
+                [
+                    "Nadie olvida su risa contagiosa",
+                    17
+                ],
+                [
+                    "Habla el niño listo",
+                    10
+                ],
+                [
+                    "El profesor tiene un libro viejo",
+                    22
+                ],
+                [
+                    "Cuento un fino detalle",
+                    11
+                ],
+                [
+                    "Aún está solo el nido vacío.",
+                    18
+                ]
             ]
         },
         "e": {
             "ipa": "e",
             "description": "/e/: Close-mid front unrounded vowel",
             "formant": {
-                "f1": [380, 691],
-                "f2": [1892, 2462],
+                "f1": [
+                    380,
+                    691
+                ],
+                "f2": [
+                    1892,
+                    2462
+                ],
                 "f1_low": 380,
                 "f1_high": 691,
                 "f2_low": 1892,
@@ -90,60 +220,186 @@
                 "e"
             ],
             "Syllable": [
-                "be",
-                "de",
-                "gue",
-                "pe",
-                "te",
-                "que",
-                "ne",
-                "me",
-                "le",
-                "re"
+                [
+                    "be",
+                    1
+                ],
+                [
+                    "de",
+                    1
+                ],
+                [
+                    "ge",
+                    1
+                ],
+                [
+                    "pe",
+                    1
+                ],
+                [
+                    "te",
+                    1
+                ],
+                [
+                    "que",
+                    2
+                ],
+                [
+                    "ne",
+                    1
+                ],
+                [
+                    "me",
+                    1
+                ],
+                [
+                    "le",
+                    1
+                ],
+                [
+                    "re",
+                    1
+                ]
             ],
             "Word": [
-                "bello",
-                "mesa",
-                "peso",
-                "leche",
-                "leña",
-                "techo",
-                "tema",
-                "pelo",
-                "letra",
-                "tela"
+                [
+                    "bello",
+                    1
+                ],
+                [
+                    "mesa",
+                    1
+                ],
+                [
+                    "peso",
+                    1
+                ],
+                [
+                    "leche",
+                    1
+                ],
+                [
+                    "leña",
+                    1
+                ],
+                [
+                    "techo",
+                    1
+                ],
+                [
+                    "tema",
+                    1
+                ],
+                [
+                    "pelo",
+                    1
+                ],
+                [
+                    "letra",
+                    1
+                ],
+                [
+                    "tela",
+                    1
+                ]
             ],
             "Phrase": [
-                "bella cosa",
-                "mesa grande",
-                "peso justo",
-                "leche fría",
-                "leña negra",
-                "techo blanco",
-                "tema bueno",
-                "pelo rubio",
-                "letra clara",
-                "tela cara"
+                [
+                    "bella cosa",
+                    1
+                ],
+                [
+                    "mesa grande",
+                    1
+                ],
+                [
+                    "peso justo",
+                    1
+                ],
+                [
+                    "leche fría",
+                    1
+                ],
+                [
+                    "leña negra",
+                    1
+                ],
+                [
+                    "techo blanco",
+                    1
+                ],
+                [
+                    "tema bueno",
+                    1
+                ],
+                [
+                    "pelo rubio",
+                    1
+                ],
+                [
+                    "letra clara",
+                    1
+                ],
+                [
+                    "tela cara",
+                    1
+                ]
             ],
             "Sentence": [
-                "Muestra la bella cosa.",
-                "Compramos la mesa grande.",
-                "Miden el peso justo.",
-                "La leche está en la nevera.",
-                "El poema de leña negra.",
-                "Ese techo blanco necesita pintura.",
-                "Aprenden el tema bueno.",
-                "Tengo pelo rubio.",
-                "Escribe una letra clara.",
-                "Quieres tela cara."
+                [
+                    "Muestra la bella cosa.",
+                    11
+                ],
+                [
+                    "Compramos la mesa grande.",
+                    14
+                ],
+                [
+                    "Miden el peso justo.",
+                    10
+                ],
+                [
+                    "La leche está en la nevera.",
+                    4
+                ],
+                [
+                    "El poema de leña negra.",
+                    13
+                ],
+                [
+                    "Ese techo blanco necesita pintura.",
+                    5
+                ],
+                [
+                    "Aprenden el tema bueno.",
+                    13
+                ],
+                [
+                    "Tengo pelo rubio.",
+                    7
+                ],
+                [
+                    "Escribe una letra clara.",
+                    13
+                ],
+                [
+                    "Quieres tela cara.",
+                    9
+                ]
             ]
         },
         "a": {
             "ipa": "a",
             "description": "/a/: Open front unrounded vowel",
             "formant": {
-                "f1": [605, 1045],
-                "f2": [1399, 1780],
+                "f1": [
+                    605,
+                    1045
+                ],
+                "f2": [
+                    1399,
+                    1780
+                ],
                 "f1_low": 605,
                 "f1_high": 1045,
                 "f2_low": 1399,
@@ -157,58 +413,186 @@
                 "a"
             ],
             "Syllable": [
-                "ba",
-                "da",
-                "ga",
-                "pa",
-                "ta",
-                "ca",
-                "na",
-                "ma",
-                "la",
-                "ra"
+                [
+                    "ba",
+                    1
+                ],
+                [
+                    "da",
+                    1
+                ],
+                [
+                    "ga",
+                    1
+                ],
+                [
+                    "pa",
+                    1
+                ],
+                [
+                    "ta",
+                    1
+                ],
+                [
+                    "ca",
+                    1
+                ],
+                [
+                    "na",
+                    1
+                ],
+                [
+                    "ma",
+                    1
+                ],
+                [
+                    "la",
+                    1
+                ],
+                [
+                    "ra",
+                    1
+                ]
             ],
             "Word": [
-                "pata",
-                "lana",
-                "bajo",
-                "taza",
-                "sala",
-                "mano",
-                "papa",
-                "mapa"
+                [
+                    "pata",
+                    1
+                ],
+                [
+                    "casa",
+                    1
+                ],
+                [
+                    "dama",
+                    1
+                ],
+                [
+                    "lana",
+                    1
+                ],
+                [
+                    "bajo",
+                    1
+                ],
+                [
+                    "taza",
+                    1
+                ],
+                [
+                    "sala",
+                    1
+                ],
+                [
+                    "mano",
+                    1
+                ],
+                [
+                    "papa",
+                    1
+                ],
+                [
+                    "mapa",
+                    1
+                ]
             ],
             "Phrase": [
-                "dama linda",
-                "casa blanca",
-                "pata rota",
-                "lana suave",
-                "bajo sol",
-                "taza llena",
-                "sala vacía",
-                "mano firme",
-                "papa frita",
-                "mapa mundial"
+                [
+                    "dama linda",
+                    1
+                ],
+                [
+                    "casa blanca",
+                    1
+                ],
+                [
+                    "pata rota",
+                    1
+                ],
+                [
+                    "lana suave",
+                    1
+                ],
+                [
+                    "bajo sol",
+                    1
+                ],
+                [
+                    "taza llena",
+                    1
+                ],
+                [
+                    "sala vacía",
+                    1
+                ],
+                [
+                    "mano firme",
+                    1
+                ],
+                [
+                    "papa frita",
+                    1
+                ],
+                [
+                    "mapa mundial",
+                    1
+                ]
             ],
             "Sentence": [
-                "Mira la dama linda.",
-                "Cenan en la casa blanca.",
-                "La silla tiene una pata rota.",
-                "La oveja regala lana suave.",
-                "Leo bajo sol.",
-                "Toma la taza llena.",
-                "Nadie está en la sala vacía.",
-                "Tiene la mano firme.",
-                "Comemos papas fritas.",
-                "Veo el mapa mundial."
+                [
+                    "Mira la dama linda.",
+                    9
+                ],
+                [
+                    "Cenan en la casa blanca.",
+                    13
+                ],
+                [
+                    "La silla tiene una pata rota.",
+                    20
+                ],
+                [
+                    "La oveja regala lana suave.",
+                    17
+                ],
+                [
+                    "Leo bajo sol.",
+                    5
+                ],
+                [
+                    "Toma la taza llena.",
+                    9
+                ],
+                [
+                    "Nadie está en la sala vacía.",
+                    18
+                ],
+                [
+                    "Tiene la mano firme.",
+                    10
+                ],
+                [
+                    "Comemos papas fritas.",
+                    9
+                ],
+                [
+                    "Veo el mapa mundial.",
+                    6
+                ]
             ]
         },
         "o": {
             "ipa": "o",
             "description": "/o/: Close-mid back rounded vowel",
             "formant": {
-                "f1": [395, 725],
-                "f2": [871, 1460],
+                "f1": [
+                    395,
+                    725
+                ],
+                "f2": [
+                    871,
+                    1460
+                ],
                 "f1_low": 395,
                 "f1_high": 725,
                 "f2_low": 871,
@@ -222,60 +606,186 @@
                 "o"
             ],
             "Syllable": [
-                "bo",
-                "do",
-                "go",
-                "po",
-                "to",
-                "co",
-                "no",
-                "mo",
-                "lo",
-                "ro"
+                [
+                    "bo",
+                    1
+                ],
+                [
+                    "do",
+                    1
+                ],
+                [
+                    "go",
+                    1
+                ],
+                [
+                    "po",
+                    1
+                ],
+                [
+                    "to",
+                    1
+                ],
+                [
+                    "co",
+                    1
+                ],
+                [
+                    "no",
+                    1
+                ],
+                [
+                    "mo",
+                    1
+                ],
+                [
+                    "lo",
+                    1
+                ],
+                [
+                    "ro",
+                    1
+                ]
             ],
             "Word": [
-                "solo",
-                "loca",
-                "rojo",
-                "poco",
-                "todo",
-                "bote",
-                "moto",
-                "polo",
-                "gota",
-                "tomo"
+                [
+                    "solo",
+                    1
+                ],
+                [
+                    "loca",
+                    1
+                ],
+                [
+                    "rojo",
+                    1
+                ],
+                [
+                    "poco",
+                    1
+                ],
+                [
+                    "todo",
+                    1
+                ],
+                [
+                    "bote",
+                    1
+                ],
+                [
+                    "moto",
+                    1
+                ],
+                [
+                    "polo",
+                    1
+                ],
+                [
+                    "gota",
+                    1
+                ],
+                [
+                    "tomo",
+                    1
+                ]
             ],
             "Phrase": [
-                "solo brillante",
-                "cosa loca",
-                "rojo claro",
-                "poco tiempo",
-                "todo listo",
-                "bote gris",
-                "moto rápida",
-                "polo frío",
-                "gota grande",
-                "tomo zumo"
+                [
+                    "solo brillante",
+                    1
+                ],
+                [
+                    "cosa loca",
+                    1
+                ],
+                [
+                    "rojo claro",
+                    1
+                ],
+                [
+                    "poco tiempo",
+                    1
+                ],
+                [
+                    "todo listo",
+                    1
+                ],
+                [
+                    "bote gris",
+                    1
+                ],
+                [
+                    "moto rápida",
+                    1
+                ],
+                [
+                    "polo frío",
+                    1
+                ],
+                [
+                    "gota grande",
+                    1
+                ],
+                [
+                    "tomo zumo",
+                    1
+                ]
             ],
             "Sentence": [
-                "Es solo brillante el diamante.",
-                "Escuchan una cosa loca.",
-                "Pinto con rojo claro.",
-                "Hay poco tiempo.",
-                "Está todo listo.",
-                "Van en bote gris.",
-                "Montan en moto rápida.",
-                "Ese polo es frío.",
-                "La gota grande cae al suelo.",
-                "Siempre tomo zumo por la mañana."
+                [
+                    "Es solo brillante el diamante.",
+                    4
+                ],
+                [
+                    "Escuchan una cosa loca.",
+                    14
+                ],
+                [
+                    "Pinto con rojo claro.",
+                    11
+                ],
+                [
+                    "Hay poco tiempo.",
+                    5
+                ],
+                [
+                    "Está todo listo.",
+                    6
+                ],
+                [
+                    "Van en bote gris.",
+                    8
+                ],
+                [
+                    "Montan en moto rápida.",
+                    11
+                ],
+                [
+                    "Ese polo es frío.",
+                    5
+                ],
+                [
+                    "La gota grande cae al suelo.",
+                    4
+                ],
+                [
+                    "Siempre tomo zumo por la mañana.",
+                    9
+                ]
             ]
         },
         "u": {
             "ipa": "u",
             "description": "/u/: Close back rounded vowel",
             "formant": {
-                "f1": [285, 474],
-                "f2": [570, 1227],
+                "f1": [
+                    285,
+                    474
+                ],
+                "f2": [
+                    570,
+                    1227
+                ],
                 "f1_low": 285,
                 "f1_high": 474,
                 "f2_low": 570,
@@ -289,51 +799,168 @@
                 "u"
             ],
             "Syllable": [
-                "bu",
-                "du",
-                "gu",
-                "pu",
-                "tu",
-                "cu",
-                "nu",
-                "mu",
-                "lu",
-                "ru"
+                [
+                    "bu",
+                    1
+                ],
+                [
+                    "du",
+                    1
+                ],
+                [
+                    "gu",
+                    1
+                ],
+                [
+                    "pu",
+                    1
+                ],
+                [
+                    "tu",
+                    1
+                ],
+                [
+                    "cu",
+                    1
+                ],
+                [
+                    "nu",
+                    1
+                ],
+                [
+                    "mu",
+                    1
+                ],
+                [
+                    "lu",
+                    1
+                ],
+                [
+                    "ru",
+                    1
+                ]
             ],
             "Word": [
-                "pura",
-                "luna",
-                "jugo",
-                "mudo",
-                "crudo",
-                "nube",
-                "rulo",
-                "duda",
-                "puño",
-                "chulo"
+                [
+                    "pura",
+                    1
+                ],
+                [
+                    "luna",
+                    1
+                ],
+                [
+                    "jugo",
+                    1
+                ],
+                [
+                    "mudo",
+                    1
+                ],
+                [
+                    "crudo",
+                    1
+                ],
+                [
+                    "nube",
+                    1
+                ],
+                [
+                    "rulo",
+                    1
+                ],
+                [
+                    "duda",
+                    1
+                ],
+                [
+                    "puño",
+                    1
+                ],
+                [
+                    "chulo",
+                    1
+                ]
             ],
             "Phrase": [
-                "pura victoria",
-                "luna llena",
-                "jugo dulce",
-                "mudo total",
-                "muy crudo",
-                "nube gris",
-                "rulo moreno",
-                "mucha duda",
-                "puño cerrado",
-                "¡qué chulo!"
+                [
+                    "pura victoria",
+                    1
+                ],
+                [
+                    "luna llena",
+                    1
+                ],
+                [
+                    "jugo dulce",
+                    1
+                ],
+                [
+                    "mudo total",
+                    1
+                ],
+                [
+                    "muy crudo",
+                    1
+                ],
+                [
+                    "nube gris",
+                    1
+                ],
+                [
+                    "rulo moreno",
+                    1
+                ],
+                [
+                    "mucha duda",
+                    1
+                ],
+                [
+                    "puño cerrado",
+                    1
+                ],
+                [
+                    "¡qué chulo!",
+                    1
+                ]
             ],
             "Sentence": [
-                "La luna es llena",
-                "El jugo está dulce",
-                "Queda mudo del choque",
-                "El pescado está muy crudo",
-                "La nube gris cubre el cielo",
-                "El rulo moreno está en su lugar",
-                "Voy con mucha duda",
-                "Mueve el puño cerrado",
-                "Te dicen ¡qué chulo!"
+                [
+                    "La luna es llena",
+                    4
+                ],
+                [
+                    "El jugo está dulce",
+                    4
+                ],
+                [
+                    "Queda mudo del choque",
+                    7
+                ],
+                [
+                    "El pescado está muy crudo",
+                    22
+                ],
+                [
+                    "La nube gris cubre el cielo",
+                    4
+                ],
+                [
+                    "El rulo moreno está en su lugar",
+                    4
+                ],
+                [
+                    "Voy con mucha duda",
+                    9
+                ],
+                [
+                    "Mueve el puño cerrado",
+                    10
+                ],
+                [
+                    "Te dicen ¡qué chulo!",
+                    11
+                ]
             ]
         }
     }
